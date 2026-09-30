@@ -1,6 +1,6 @@
 # ASTRA Master End-to-End System Benchmark Report
 **Dataset:** `ASTRA_FINAL_TEST_SET`  
-**Execution Timestamp:** 2026-09-30 19:30:35 UTC  
+**Execution Timestamp:** 2026-09-30 20:16:55 UTC  
 **Hardware Engine:** NVIDIA GeForce RTX 3050 A Laptop GPU (`cuda`)  
 **Total Independent Captures:** 1050 (1,000 Communications + 50 Non-Target Noise)
 

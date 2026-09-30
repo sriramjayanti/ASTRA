@@ -4,7 +4,7 @@
   "communications_captures": 1000,
   "noise_captures": 50,
   "hardware_device": "cuda",
-  "execution_time_seconds": 632.13,
+  "execution_time_seconds": 1609.94,
   "metrics": {
     "Modulation Top-1": 32.7,
     "Modulation Top-3": 70.2,

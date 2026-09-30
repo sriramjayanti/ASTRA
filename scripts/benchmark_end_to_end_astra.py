@@ -324,7 +324,7 @@ def run_benchmark():
             snr_breakdown[snr_bucket]["demod_ok"] += 1
 
         # STAGE 6: Interleaver Testing Engine
-        input_bits = (demod_bits if demod_bits is not None else gt_mod_bits)[:512]
+        input_bits = (demod_bits if demod_bits is not None else gt_mod_bits)[:2048]
         int_res = int_engine.test_candidates({"variant_id": "var0", "hard_bits": input_bits, "candidate_id": sig_id})
         surviving_ints = [c.interleaver_family.lower() for c in int_res.surviving_candidates]
         is_int_in_topk = (gt_int.lower() in surviving_ints or gt_int.lower() == "none")

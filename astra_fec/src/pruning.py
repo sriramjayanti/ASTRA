@@ -22,12 +22,9 @@ def prune_fec_candidates(
     if not candidates:
         return []
         
-    valid_cands = [c for c in candidates if not c.rejected]
-    if not valid_cands:
-        # Fallback to whatever candidates are available
-        valid_cands = list(candidates)
-        
-    valid_cands.sort(key=lambda c: c.fec_quality_score, reverse=True)
+    # Separate validated vs unvalidated candidates while preserving family representation
+    valid_cands = list(candidates)
+    valid_cands.sort(key=lambda c: (not c.rejected, c.fec_quality_score), reverse=True)
     
     if not enforce_family_diversity:
         survivors = valid_cands[:beam_width]

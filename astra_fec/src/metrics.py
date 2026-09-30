@@ -29,10 +29,19 @@ def normalize_decoder_metrics(decoder_result: DecoderResult, family: str) -> Dic
         errors_corrected = int(metrics.get("estimated_errors_corrected", 0))
         
         normalized_path_metric = norm_pm
-        parity_success = term_match and (norm_pm < 0.35)
-        # Low path metric implies high syndrome/consistency score
-        syndrome_score = float(np.clip(1.0 - norm_pm * 2.5, 0.0, 1.0)) if term_match else 0.0
-        converged = decoder_result.success
+        # True convolutional codeword has norm_pm < 0.08 under clean/moderate SNR. Random noise gets ~0.13.
+        # Strict parity success requires norm_pm < 0.09
+        parity_success = term_match and (norm_pm < 0.09)
+        if norm_pm < 0.05:
+            syndrome_score = 1.0
+        elif norm_pm < 0.09:
+            syndrome_score = float(np.clip(1.0 - (norm_pm - 0.05) * 20.0, 0.2, 1.0))
+        elif norm_pm < 0.15:
+            syndrome_score = 0.10
+        else:
+            syndrome_score = 0.0
+            
+        converged = decoder_result.success and (norm_pm < 0.12)
         
     elif family in ("reed_solomon", "rs"):
         uncorrectable = int(metrics.get("uncorrectable_codewords", 0))
