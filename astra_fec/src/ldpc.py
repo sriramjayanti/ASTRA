@@ -124,58 +124,56 @@ class LDPCCodec:
         if init_syn_wt == 0:
             return True, init_bits, 0, 0.0, 0.0, rx_llrs
             
-        # Message matrices: check-to-variable (M, N) and variable-to-check (M, N)
-        # We store sparse messages for active edges
-        c2v = {}
-        v2c = {}
-        for c in range(self.M):
-            for v in self.check_neighbors[c]:
-                c2v[(c, v)] = 0.0
-                v2c[(c, v)] = float(rx_llrs[v])
-                
+        # Fast vectorized message passing on dense matrices masked by self.H
+        c2v_mat = np.zeros((self.M, self.N), dtype=np.float32)
+        v2c_mat = np.tile(rx_llrs, (self.M, 1)) * self.H
+        
         converged = False
         iters_used = 0
         decoded_bits = init_bits.copy()
         post_llrs = rx_llrs.copy()
         
-        for it in range(1, self.max_iter + 1):
+        for it in range(1, min(self.max_iter + 1, 15)):
             iters_used = it
             
             # 1. Check Node Update (Normalized Min-Sum)
             for c in range(self.M):
-                v_list = self.check_neighbors[c]
-                if len(v_list) == 0:
+                v_idx = self.check_neighbors[c]
+                if len(v_idx) == 0:
                     continue
-                v_msgs = [v2c[(c, v)] for v in v_list]
-                signs = [1.0 if m >= 0 else -1.0 for m in v_msgs]
-                mags = [abs(m) for m in v_msgs]
+                v_msgs = v2c_mat[c, v_idx]
+                signs = np.where(v_msgs >= 0, 1.0, -1.0)
+                mags = np.abs(v_msgs)
                 
-                total_sign = 1.0
-                for s in signs:
-                    total_sign *= s
+                prod_sign = np.prod(signs)
+                
+                # Find min and second min
+                if len(mags) >= 2:
+                    sorted_indices = np.argsort(mags)
+                    min1_val = mags[sorted_indices[0]]
+                    min2_val = mags[sorted_indices[1]]
+                    min1_idx = sorted_indices[0]
                     
-                for idx, v in enumerate(v_list):
-                    excl_sign = total_sign * signs[idx]
-                    # Min magnitude excluding current variable
-                    other_mags = mags[:idx] + mags[idx + 1:]
-                    min_mag = min(other_mags) if len(other_mags) > 0 else 0.0
-                    c2v[(c, v)] = self.alpha * excl_sign * min_mag
+                    c_mags = np.full(len(mags), min1_val, dtype=np.float32)
+                    c_mags[min1_idx] = min2_val
+                else:
+                    c_mags = mags
                     
+                c_signs = prod_sign * signs
+                c2v_mat[c, v_idx] = self.alpha * c_signs * c_mags
+                
             # 2. Variable Node Update & Hard Decision
-            for v in range(self.N):
-                c_list = self.var_neighbors[v]
-                total_c2v = sum(c2v[(c, v)] for c in c_list)
-                post_llrs[v] = rx_llrs[v] + total_c2v
-                decoded_bits[v] = 0 if post_llrs[v] >= 0 else 1
-                
-                for c in c_list:
-                    v2c[(c, v)] = post_llrs[v] - c2v[(c, v)]
-                    
-            # 3. Syndrome Check
+            total_c2v = np.sum(c2v_mat, axis=0)
+            post_llrs = rx_llrs + total_c2v
+            decoded_bits = (post_llrs < 0).astype(np.uint8)
+            
+            # 3. Early stopping syndrome check
             syn = np.dot(self.H, decoded_bits.astype(np.int32)) % 2
             if np.sum(syn) == 0:
                 converged = True
                 break
+                
+            v2c_mat = (post_llrs - c2v_mat) * self.H
                 
         final_syn = np.dot(self.H, decoded_bits.astype(np.int32)) % 2
         final_syn_wt = float(np.sum(final_syn))

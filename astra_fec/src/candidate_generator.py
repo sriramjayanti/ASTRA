@@ -96,9 +96,6 @@ class FECCandidateGenerator:
                     continue
                     
                 offsets_to_test = [0]
-                if self.enable_alignment and m > 1:
-                    offsets_to_test.extend([o for o in range(1, min(m, self.max_offsets))])
-                    
                 for off in offsets_to_test:
                     if len(hypotheses) >= self.max_candidates:
                         break

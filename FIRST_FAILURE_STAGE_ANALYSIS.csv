@@ -1,0 +1,8 @@
+stage,failure_count,percentage,notes
+Stage 3 (Modulation Intelligence),640,64.0%,Modulation Top-3 missed true modulation class in noisy / impaired channel
+Stage 4 (Symbol Rate Estimation),182,18.2%,Baud candidates missed true symbol rate (RRC roll-off lobe picking)
+Stage 6 (Synchronization),0,0.0%,Synchronization lock succeeded across candidate hypotheses (100% sync rate)
+Stage 7 (Demodulation & Constellation Slicing),169,16.9%,Phase rotation ambiguity and constellation grid mismatch under compound CFO
+Stage 8 (Deinterleaving),0,0.0%,Interleaver candidate beam retained true interleaver family across test space
+Stage 9 (Forward Error Correction),9,0.9%,High residual BER exceeded Viterbi/RS error correction capacity
+Stage 10 (Validation / Frame Sync),0,0.0%,Validation correctly rejected uncorrected or misaligned frame candidates

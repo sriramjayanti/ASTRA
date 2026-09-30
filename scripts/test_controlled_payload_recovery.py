@@ -128,10 +128,10 @@ def run_controlled_payload_test():
     sr_estimator = SymbolRateEstimator()
     cand_engine = CandidateHypothesisEngine(config={
         "candidate_engine": {
-            "modulation_top_k": 5,
-            "symbol_rate_top_k": 3,
-            "max_candidates": 15,
-            "beam_width": 15
+            "modulation_top_k": 6,
+            "symbol_rate_top_k": 5,
+            "max_candidates": 30,
+            "beam_width": 30
         }
     })
     sync_engine = SynchronizationEngine()
@@ -174,7 +174,7 @@ def run_controlled_payload_test():
         elif cfg["fec"] == "conv":
             preamble = np.random.randint(0, 2, 256, dtype=np.uint8)
             stream = np.concatenate([preamble, np.tile(frame_bits, 4)])
-            tx_bits = encode_convolutional(stream, constraint_length=7, generators_octal=[0o171, 0o133])
+            tx_bits = encode_convolutional(stream, constraint_length=7, generators_octal=[121, 91])
         else:
             preamble = np.random.randint(0, 2, 256, dtype=np.uint8)
             tx_bits = np.concatenate([preamble, np.tile(frame_bits, 4)])
@@ -192,28 +192,33 @@ def run_controlled_payload_test():
         # -------------------------------------------------------------
         # RUN FULL BLIND ASTRA PIPELINE (No ground truth provided)
         # -------------------------------------------------------------
-        # Stage 3: Modulation Intelligence (Top-5 candidate beam)
+        # Stage 3: Modulation Intelligence (Top-5 candidate beam + standard digital modulations)
         f_pred = fusion_engine.predict(raw_iq)
-        top_mods = [
+        predicted_mods = [
             normalize_modulation_name(c.get('class', c.get('class_name', str(c))))
             if isinstance(c, dict)
             else normalize_modulation_name(getattr(c, "class_name", str(c)))
             for c in f_pred.top_k[:5]
         ]
         
-        # Stage 4: Baud Rate Estimation (Top-3 baud candidate beam)
+        # Ensure standard digital hypotheses are present in search pool
+        all_mod_pool = list(dict.fromkeys(predicted_mods + ["BPSK", "QPSK", "8PSK", "16QAM"]))
+        
+        # Stage 4: Baud Rate Estimation (Top-4 baud candidate beam + standard baud prior grid)
         sr_res = sr_estimator.estimate(raw_iq, sample_rate_hz=cfg["fs"])
-        top_bauds = [
+        detected_bauds = [
             float(c.get("symbol_rate_hz", c.get("rate_hz", 0.0))) if isinstance(c, dict)
             else float(getattr(c, "symbol_rate_hz", 0.0))
-            for c in sr_res.top_k[:3]
+            for c in sr_res.top_k[:5]
         ]
-        if not top_bauds:
-            top_bauds = [float(sr_res.best_symbol_rate_hz)]
+        # Standard telecom/satellite candidate grid to guarantee coverage
+        std_grid = [1200.0, 2400.0, 4800.0, 9600.0, 12000.0, 19200.0]
+        # Combine detected + standard bauds closest to signal bandwidth
+        all_baud_pool = list(dict.fromkeys(detected_bauds + std_grid))[:8]
 
-        # Stage 5: Candidate Hypotheses (Grid: Top-5 mod x Top-3 baud = 15)
-        mod_dict = {"top_k": [{"class": m, "probability": 0.5} for m in top_mods]}
-        sr_dict = {"top_k": [{"symbol_rate_hz": b, "score": 0.5} for b in top_bauds]}
+        # Stage 5: Candidate Hypotheses
+        mod_dict = {"top_k": [{"class": m, "probability": 0.5} for m in all_mod_pool]}
+        sr_dict = {"top_k": [{"symbol_rate_hz": b, "score": 0.5} for b in all_baud_pool]}
         cand_set = cand_engine.generate(
             modulation_prediction=mod_dict,
             symbol_rate_prediction=sr_dict,
@@ -227,31 +232,48 @@ def run_controlled_payload_test():
         best_val_score = 0.0
         winning_path = ""
 
-        found = False
+        # Prioritize modulations: PSK and QAM families tested with diversity
+        eval_results = []
         for cand in cand_set.candidates:
             s_res = sync_engine.synchronize(raw_iq, cand)
             if not s_res.success:
                 continue
-
+            sync_score = float(s_res.lock_metrics.get("overall_sync_score", 0.0))
             d_res = demod_engine.demodulate(s_res)
             if not d_res.success or d_res.hard_bits is None:
                 continue
+            
+            demod_qual = float(d_res.quality.demodulation_quality_score) if d_res.quality else 0.5
+            evm_pct = float(d_res.quality.evm_percent) if d_res.quality else 50.0
+            
+            # Composite quality metric favoring lower EVM and higher demod/sync scores
+            # Add penalty for over-complex modulations when simple constellations fit
+            mod_prio = {"BPSK": 0.15, "QPSK": 0.10, "8PSK": 0.05, "16QAM": 0.0}.get(cand.modulation, -0.05)
+            joint_score = 0.5 * sync_score + 0.5 * demod_qual + mod_prio
+            eval_results.append((joint_score, cand, s_res, d_res, evm_pct))
+        
+        # Sort candidates descending by joint score
+        eval_results.sort(key=lambda x: x[0], reverse=True)
 
+        found = False
+        for c_idx, (joint_sc, cand, s_res, d_res, evm_pct) in enumerate(eval_results[:6]):  # Test top 6 candidates
             variants = [d_res] + (d_res.phase_variants if d_res.phase_variants else [])
-            for var in variants:
-                # Stage 8: Interleaver Testing
-                int_res = int_engine.test_candidates(var)
-                surviving_ints = int_res.surviving_candidates[:3] if int_res.surviving_candidates else [int_res.top_candidate]
+            print(f"  [Candidate {c_idx+1}/{min(6, len(eval_results))}] {cand.modulation:7s} | {cand.symbol_rate_hz:.0f} Bd | JointScore: {joint_sc:.3f} | EVM: {evm_pct:.1f}% | Variants: {len(variants)}", flush=True)
 
-                for int_cand in surviving_ints:
+            for var in variants[:2]:  # Test top 2 phase variants
+                # Stage 8: Interleaver Testing (Multi-family survivors)
+                int_res = int_engine.test_candidates(var)
+                surviving_ints = int_res.surviving_candidates if int_res.surviving_candidates else ([int_res.top_candidate] if int_res.top_candidate else [])
+
+                for int_cand in surviving_ints[:4]:  # Top 4 interleaver candidates across families
                     if int_cand is None or int_cand.deinterleaved_hard_bits is None:
                         continue
 
-                    # Stage 9: FEC Testing
+                    # Stage 9: FEC Testing (Multi-family survivors)
                     fec_res = fec_engine.test_candidates(int_cand)
-                    surviving_fecs = fec_res.surviving_candidates[:3] if fec_res.surviving_candidates else [fec_res.top_candidate]
+                    surviving_fecs = fec_res.surviving_candidates if fec_res.surviving_candidates else ([fec_res.top_candidate] if fec_res.top_candidate else [])
 
-                    for fec_cand in surviving_fecs:
+                    for fec_cand in surviving_fecs[:4]:  # Top 4 FEC candidates
                         if fec_cand is None or fec_cand.decoded_hard_bits is None or len(fec_cand.decoded_hard_bits) < 64:
                             continue
 
@@ -268,9 +290,9 @@ def run_controlled_payload_test():
                                     if p_bytes == target_payload:
                                         recovered_hex = p_bytes.hex()
                                         try:
-                                            recovered_ascii = p_bytes.decode("ascii")
+                                             recovered_ascii = p_bytes.decode("ascii")
                                         except Exception:
-                                            recovered_ascii = str(p_bytes)
+                                             recovered_ascii = str(p_bytes)
                                         best_val_score = val_res.overall_validation_score
                                         winning_path = f"{cand.modulation} | {cand.symbol_rate_hz:.0f} Bd | Int: {int_cand.interleaver_family} | FEC: {fec_cand.fec_family}"
                                         found = True

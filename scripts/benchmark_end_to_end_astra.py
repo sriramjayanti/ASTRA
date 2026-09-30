@@ -89,8 +89,7 @@ def run_benchmark():
 
     # Initialize all ASTRA Engines
     print("\n[INIT] Initializing ASTRA Pipeline Stages & Trained Models...")
-    cfg_path = os.path.join(str(WORKSPACE), "astra_fusion", "configs", "fusion_config.yaml")
-    fusion_engine = ASTRAFusionEngine(config_path=cfg_path, device=device)
+    fusion_engine = ASTRAFusionEngine(top_k=5, device=device)
     sr_estimator = SymbolRateEstimator()
     cand_engine = CandidateHypothesisEngine()
     sync_engine = SynchronizationEngine()
