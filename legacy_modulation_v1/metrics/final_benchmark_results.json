@@ -1,0 +1,139 @@
+{
+  "benchmark_dataset": "ASTRA_FINAL_TEST_SET",
+  "total_captures": 1050,
+  "communications_captures": 1000,
+  "noise_captures": 50,
+  "hardware_device": "cuda",
+  "execution_time_seconds": 1049.72,
+  "metrics": {
+    "Modulation Top-1": 17.2,
+    "Modulation Top-3": 41.3,
+    "Baud Top-1": 37.1,
+    "Baud Top-3": 55.6,
+    "Sync success": 100.0,
+    "Correct demodulation": 0.3,
+    "Correct interleaver in Top-K": 100.0,
+    "Correct FEC in Top-K": 74.1,
+    "Pipeline Top-1": 4.4,
+    "Payload exact recovery": 0.0,
+    "Noise false-positive rate": 22.0
+  },
+  "snr_breakdown": {
+    "Low (< 4 dB)": {
+      "total": 324,
+      "mod_top1": 52,
+      "baud_top1": 70,
+      "sync_ok": 324,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "Medium (4-14 dB)": {
+      "total": 338,
+      "mod_top1": 52,
+      "baud_top1": 138,
+      "sync_ok": 338,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "High (> 14 dB)": {
+      "total": 338,
+      "mod_top1": 68,
+      "baud_top1": 163,
+      "sync_ok": 338,
+      "demod_ok": 3,
+      "payload_ok": 0
+    }
+  },
+  "modulation_breakdown": {
+    "2-FSK": {
+      "total": 100,
+      "mod_top1": 44,
+      "mod_top3": 91,
+      "baud_top1": 8,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "4-FSK": {
+      "total": 100,
+      "mod_top1": 76,
+      "mod_top3": 95,
+      "baud_top1": 20,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "BPSK": {
+      "total": 100,
+      "mod_top1": 14,
+      "mod_top3": 52,
+      "baud_top1": 42,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "QPSK": {
+      "total": 100,
+      "mod_top1": 0,
+      "mod_top3": 15,
+      "baud_top1": 49,
+      "sync_ok": 100,
+      "demod_ok": 1,
+      "payload_ok": 0
+    },
+    "8PSK": {
+      "total": 100,
+      "mod_top1": 0,
+      "mod_top3": 14,
+      "baud_top1": 53,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "DQPSK": {
+      "total": 100,
+      "mod_top1": 0,
+      "mod_top3": 20,
+      "baud_top1": 54,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "MSK": {
+      "total": 100,
+      "mod_top1": 10,
+      "mod_top3": 21,
+      "baud_top1": 13,
+      "sync_ok": 100,
+      "demod_ok": 2,
+      "payload_ok": 0
+    },
+    "16QAM": {
+      "total": 100,
+      "mod_top1": 0,
+      "mod_top3": 18,
+      "baud_top1": 46,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "64QAM": {
+      "total": 100,
+      "mod_top1": 1,
+      "mod_top3": 31,
+      "baud_top1": 48,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    },
+    "256QAM": {
+      "total": 100,
+      "mod_top1": 27,
+      "mod_top3": 56,
+      "baud_top1": 38,
+      "sync_ok": 100,
+      "demod_ok": 0,
+      "payload_ok": 0
+    }
+  }
+}

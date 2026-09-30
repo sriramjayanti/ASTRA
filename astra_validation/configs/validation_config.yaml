@@ -1,0 +1,72 @@
+validation:
+  version: "1.0.0"
+  engine_name: "ASTRA_Validation_Engine"
+
+  mode: "blind"  # 'blind' or 'profile_aware'
+
+  # Feature schema version for downstream Stage 11 XGBoost
+  feature_schema_version: "validation_features_v1"
+
+  # CRC verification configuration
+  crc:
+    enabled: true
+    profiles:
+      - "crc8_atm"
+      - "crc16_ccitt_false"
+      - "crc16_ibm"
+      - "crc32_ieee"
+    candidate_frame_lengths:
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+    max_search_offsets: 8
+
+  # Parity checking
+  parity:
+    enabled: true
+    block_sizes: [8, 16, 32]
+
+  # FEC Syndrome and Decoder Metric Integration
+  syndrome:
+    enabled: true
+
+  # Re-encoding verification
+  reencoding:
+    enabled: true
+    max_comparison_bits: 2048
+
+  # Frame repetition and periodicity
+  repetition:
+    enabled: true
+    min_period_bits: 32
+    max_period_bits: 2048
+    max_candidate_periods: 16
+    correlation_threshold: 0.30
+
+  # Sync word search
+  sync_word:
+    enabled: true
+    max_hamming_fraction: 0.125  # Allow up to 1-2 bit flips in 16-bit sync word
+
+  # Header field rules
+  headers:
+    enabled: true
+
+  # Evidence scoring weights
+  scoring:
+    crc_weight: 2.0
+    syndrome_weight: 1.8
+    reencoding_weight: 1.5
+    sync_weight: 1.5
+    repetition_weight: 1.2
+    header_weight: 1.0
+    length_weight: 1.0
+    generic_structure_weight: 0.3
+    contradiction_penalty: 1.5
+
+  # Beam pruning
+  pruning:
+    beam_width: 5
+    near_tie_threshold: 0.05

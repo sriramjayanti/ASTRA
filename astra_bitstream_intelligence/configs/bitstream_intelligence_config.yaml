@@ -1,0 +1,91 @@
+bitstream_intelligence:
+  version: "1.0.0"
+  engine_name: "ASTRA_Bitstream_Intelligence_Engine"
+  feature_schema_version: "bitstream_features_v1"
+
+  # Minimum data thresholds
+  min_bits_for_entropy: 16
+  min_bits_for_autocorrelation: 64
+  min_frames_for_repetition: 3
+  min_sync_occurrences: 2
+
+  # Entropy analysis
+  entropy:
+    enabled: true
+    window_sizes:
+      - 64
+      - 128
+      - 256
+      - 512
+    sliding_step: 16
+    ngram_sizes:
+      - 1
+      - 2
+      - 4
+      - 8
+    change_point_threshold: 0.15
+
+  # Autocorrelation
+  autocorrelation:
+    enabled: true
+    max_lag_fraction: 0.50
+    min_lag_bits: 16
+    max_lag_bits: 4096
+    top_k_peaks: 20
+    peak_threshold: 0.12
+    fft_threshold_bits: 2048
+
+  # Periodicity & Harmonic Merging
+  periodicity:
+    top_k: 10
+    harmonic_merge_tolerance: 0.05
+    subharmonic_penalty: 0.15
+
+  # Frame Length Estimation
+  frame_length:
+    top_k: 5
+    min_length_bits: 32
+    max_length_bits: 4096
+    candidate_standard_hints:
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 2048
+
+  # Sync Word Detection & Discovery
+  sync:
+    enabled: true
+    known_patterns:
+      - "EB90"
+      - "1ACFFC1D"
+      - "FAF334"
+    candidate_lengths:
+      - 16
+      - 24
+      - 32
+      - 64
+    max_hamming_fraction: 0.125
+
+  # Repeated Substring Discovery
+  repeated_patterns:
+    enabled: true
+    lengths:
+      - 8
+      - 16
+      - 24
+      - 32
+      - 64
+    min_occurrences: 3
+
+  # Byte Alignment
+  byte_alignment:
+    enabled: true
+
+  # Frame Segmentation & Positional Stability
+  segmentation:
+    enabled: true
+    max_frames_to_matrix: 64
+    stability_fixed_threshold: 0.90
+    stability_variable_threshold: 0.65

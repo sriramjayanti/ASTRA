@@ -1,0 +1,16 @@
+{
+  "capture_record_id": "cap_000010",
+  "file_name": "fixture_f32_be_iq.iq",
+  "file_format": "raw_iq",
+  "sample_rate_hz": 192000.0,
+  "center_frequency_hz": null,
+  "sample_count_complex": 16441,
+  "scalar_sample_count": 32882,
+  "duration_seconds": 0.08563,
+  "storage_dtype": "float32",
+  "endianness": "big",
+  "iq_order": "IQ",
+  "channel_count": 2,
+  "file_size_bytes": 131528,
+  "file_sha256": "ad57a2309a17422dfdfa67fd13bddb50fd830d204fbb9bc67b66a27b5fdd49e6"
+}

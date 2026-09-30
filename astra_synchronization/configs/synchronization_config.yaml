@@ -1,0 +1,66 @@
+synchronization:
+  version: "1.0.0"
+
+  # Preprocessing
+  preprocessing:
+    remove_dc: true
+    normalize_power: true
+    target_power: 1.0
+
+  # Carrier Frequency Offset (CFO) Recovery
+  cfo:
+    enabled: true
+    coarse_methods:
+      - "spectral"
+      - "mth_power"
+      - "phase_difference"
+    max_search_fraction_fs: 0.20 # Search within +/- 20% of Fs
+    fft_size: 4096
+
+  # Matched Filtering
+  matched_filter:
+    enabled: true
+    type: "rrc" # Root-Raised Cosine
+    rolloff_candidates:
+      - 0.20
+      - 0.25
+      - 0.35
+      - 0.50
+    default_rolloff: 0.35
+    span_symbols: 8
+
+  # Resampling for Timing Recovery
+  resampling:
+    enabled: true
+    target_sps: 2.0 # Standard 2 samples per symbol for Gardner TED
+    max_resample_ratio: 100.0
+
+  # Timing Recovery
+  timing:
+    primary: "gardner" # "gardner" or "mueller_muller"
+    refinement: "mueller_muller"
+    gardner_loop_gain: 0.015
+    gardner_damping: 0.707
+    mm_loop_gain: 0.01
+    interpolator: "polyphase" # "polyphase" or "linear"
+
+  # Fine Carrier / Phase Recovery
+  carrier:
+    psk_method: "costas"
+    qam_method: "decision_directed_pll"
+    fsk_method: "discriminator"
+    costas_loop_bw: 0.02
+    costas_damping: 0.707
+    dd_pll_bw: 0.015
+
+  # Quality Evaluation & Thresholds
+  thresholds:
+    passed_overall_score: 0.65
+    passed_timing_lock: 0.55
+    passed_carrier_lock: 0.50
+    weak_overall_score: 0.35
+    snr_profile: "normal" # "strict", "normal", "lenient"
+
+  # Ambiguity Handling
+  phase_ambiguity:
+    store_ambiguity_states: true

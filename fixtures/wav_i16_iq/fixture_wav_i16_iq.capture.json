@@ -1,0 +1,16 @@
+{
+  "capture_record_id": "cap_000013",
+  "file_name": "fixture_wav_i16_iq.wav",
+  "file_format": "wav",
+  "sample_rate_hz": 192000.0,
+  "center_frequency_hz": null,
+  "sample_count_complex": 16441,
+  "scalar_sample_count": 32882,
+  "duration_seconds": 0.08563,
+  "storage_dtype": "int16",
+  "endianness": "little",
+  "iq_order": "IQ",
+  "channel_count": 2,
+  "file_size_bytes": 65808,
+  "file_sha256": "ec83e998c1a996fca7fb5aa8dcab33826d069762c9c152119b2c4c7bfe2285be"
+}

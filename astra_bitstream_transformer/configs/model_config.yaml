@@ -1,0 +1,84 @@
+model:
+  version: "astra_bitstream_cnn_transformer_v1"
+  input_schema_version: "bitstream_model_input_v1"
+  
+  # Input Sequence Channels (C=6)
+  # Ch 0: Bipolar Bit Value (-1.0 or +1.0)
+  # Ch 1: Soft Reliability / Confidence (0.0 to 1.0)
+  # Ch 2: Local Sliding Entropy (0.0 to 1.0)
+  # Ch 3: Frame Boundary / Periodic Ramp Score (0.0 to 1.0)
+  # Ch 4: Sync Candidate Evidence / Impulse (0.0 to 1.0)
+  # Ch 5: Positional Stability Map (0.0 to 1.0)
+  input_channels: 6
+  
+  # 1D CNN Local Motif Extractor (preserves bit resolution stride=1)
+  cnn:
+    channels:
+      - 64
+      - 128
+      - 256
+    kernel_size: 7
+    residual_blocks_per_stage: 2
+    dropout: 0.1
+    activation: "silu"
+
+  # Positional Encoding
+  positional_encoding:
+    type: "sinusoidal"
+    max_len: 8192
+
+  # Transformer Encoder
+  transformer:
+    d_model: 256
+    num_heads: 8
+    num_layers: 4
+    dim_feedforward: 1024
+    dropout: 0.1
+    activation: "gelu"
+    batch_first: true
+
+  # Output Structure Labels
+  output:
+    num_classes: 6
+    labels:
+      - UNKNOWN   # 0
+      - SYNC      # 1
+      - HEADER    # 2
+      - PAYLOAD   # 3
+      - CRC       # 4
+      - PADDING   # 5
+    
+    # Sequence & Optional Frame Head
+    enable_frame_head: true
+    frame_classes: 4 # [valid_structure, header_present, payload_present, crc_present]
+
+training:
+  window_length: 2048
+  overlap_fraction: 0.5
+  batch_size: 16
+  epochs: 30
+  optimizer: "AdamW"
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  early_stopping_patience: 7
+  early_stopping_metric: "macro_f1"
+  
+  loss:
+    use_class_weights: true
+    boundary_loss_weight: 0.15
+    frame_loss_weight: 0.10
+
+  augmentations:
+    ber_rates: [0.0, 0.0001, 0.001, 0.01]
+    max_offset_noise: 64
+
+postprocessing:
+  min_region_sizes:
+    UNKNOWN: 4
+    SYNC: 8
+    HEADER: 8
+    PAYLOAD: 16
+    CRC: 4
+    PADDING: 4
+  unknown_confidence_threshold: 0.40

@@ -1,0 +1,68 @@
+# =====================================================================
+# ASTRA Synthetic Engine 8 — Master Ground-Truth / Dataset Config
+# =====================================================================
+
+dataset:
+  name: "astra_synthetic_v1"
+  version: "1.0.0"
+  master_seed: 42
+  total_records: 100
+  output_root: "./output/astra_synthetic_v1"
+
+  split:
+    train: 0.70
+    validation: 0.15
+    test: 0.15
+
+  storage:
+    save_intermediates: true
+    use_hdf5: false
+
+  validation:
+    end_to_end_clean_control: true
+    leakage_check: true
+    distribution_check: true
+
+# Class probability distributions across synthetic dimensions
+distributions:
+  modulation:
+    2fsk: 0.10
+    4fsk: 0.10
+    msk: 0.10
+    bpsk: 0.15
+    qpsk: 0.15
+    8psk: 0.10
+    16qam: 0.15
+    64qam: 0.10
+    256qam: 0.05
+
+  fec:
+    none: 0.20
+    convolutional: 0.25
+    reed_solomon: 0.20
+    concatenated: 0.15
+    ldpc: 0.20
+
+  interleaver:
+    none: 0.20
+    block: 0.25
+    convolutional: 0.20
+    diagonal: 0.15
+    pseudo_random: 0.20
+
+  channel_difficulty:
+    clean: 0.10
+    easy: 0.25
+    medium: 0.35
+    hard: 0.25
+    satellite_like: 0.05
+
+  capture_profiles:
+    raw_f32_le_iq: 0.20
+    raw_f32_be_iq: 0.10
+    raw_i16_le_iq: 0.25
+    raw_i16_le_qi: 0.15
+    raw_i8_iq: 0.10
+    wav_i16_iq: 0.10
+    wav_i16_qi: 0.05
+    sigmf_cf32_le: 0.05

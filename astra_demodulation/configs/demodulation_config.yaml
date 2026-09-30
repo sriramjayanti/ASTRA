@@ -1,0 +1,57 @@
+demodulation:
+  version: "1.0.0"
+
+  # Bit Ordering Convention (MSB-first within symbol)
+  bit_order: "msb_first"
+
+  # Constellation Normalization
+  normalization:
+    average_symbol_energy: 1.0
+
+  # Log-Likelihood Ratio (LLR) Configuration
+  # ASTRA Convention: LLR(b) = ln(P(b=0|y) / P(b=1|y))
+  # LLR > 0 -> bit 0 favored, LLR < 0 -> bit 1 favored
+  llr:
+    enabled: true
+    mode: "max_log" # "max_log" or "exact"
+    epsilon: 1.0e-12
+    clip:
+      enabled: true
+      min_val: -30.0
+      max_val: 30.0
+
+  # Noise Variance Estimation
+  noise:
+    prefer_sync_estimate: true
+    fallback_decision_directed: true
+    default_noise_var: 0.05
+
+  # Phase Ambiguity Generation
+  ambiguity:
+    enabled: true
+    bpsk:
+      rotations_deg: [0.0, 180.0]
+    qpsk:
+      rotations_deg: [0.0, 90.0, 180.0, 270.0]
+    psk8:
+      rotations_deg: [0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0]
+    square_qam:
+      rotations_deg: [0.0, 90.0, 180.0, 270.0]
+    fsk:
+      allow_tone_label_swap: true
+
+  # FSK Configuration
+  fsk:
+    method: "tone_energy" # "tone_energy" or "discriminator"
+
+  # Quality & Rejection Thresholds
+  quality:
+    minimum_symbols: 16
+    passed_evm_percent_max: 35.0
+    passed_demod_quality_min: 0.50
+    weak_demod_quality_min: 0.30
+
+  # Memory Chunking for Massive Symbol Streams
+  chunking:
+    enabled: true
+    symbol_chunk_size: 65536

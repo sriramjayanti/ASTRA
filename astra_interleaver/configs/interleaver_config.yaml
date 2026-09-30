@@ -1,0 +1,125 @@
+interleaver:
+  version: "1.0.0"
+  engine_name: "ASTRA_Interleaver_Testing_Engine"
+
+  # Supported families to search
+  families:
+    identity: true
+    block: true
+    convolutional: true
+    helical: true
+    pseudo_random: true
+
+  # Prior weights for candidate families (search heuristic only)
+  family_priors:
+    identity: 1.0
+    block: 0.85
+    convolutional: 0.70
+    helical: 0.50
+    pseudo_random: 0.40
+
+  # Block interleaver candidate search grid
+  block:
+    row_candidates:
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+    column_candidates:
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+    orientations:
+      - "row_to_column"     # write row-wise, read column-wise
+      - "column_to_row"     # write column-wise, read row-wise
+    padding_policy: "truncate_tail"  # "reject", "truncate_tail", "pad"
+    max_candidates: 30
+
+  # Convolutional interleaver search grid (Ramsey / Forney type)
+  convolutional:
+    branch_candidates:
+      - 2
+      - 3
+      - 4
+      - 6
+      - 8
+      - 12
+      - 16
+    delay_steps:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 8
+    max_candidates: 25
+
+  # Helical / diagonal interleaver search grid
+  helical:
+    rows:
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+    steps:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 7
+    orientations:
+      - "row_diagonal"
+      - "diagonal_row"
+    max_candidates: 20
+
+  # Pseudo-random permutation interleaver (constrained search)
+  pseudo_random:
+    enabled: true
+    seed_candidates:
+      - 0
+      - 1
+      - 42
+      - 123
+      - 1337
+      - 2024
+      - 65535
+    algorithms:
+      - "pcg64"
+      - "fisher_yates"
+    profiles:
+      - name: "astra_pr_standard_1k"
+        algorithm: "pcg64"
+        seed: 42
+        block_length: 1024
+      - name: "astra_pr_standard_4k"
+        algorithm: "pcg64"
+        seed: 1337
+        block_length: 4096
+    max_candidates: 15
+
+  # Search limits & beam pruning
+  search:
+    max_variants_per_demod: 4
+    max_interleavers_per_variant: 80
+    max_total_candidates: 100
+    beam_width: 10
+    lazy_materialization: false
+
+  # Structural scoring weights
+  scoring:
+    periodicity_weight: 1.0
+    autocorrelation_weight: 1.0
+    entropy_weight: 0.3
+    run_length_weight: 0.4
+    bit_balance_weight: 0.2
+    family_prior_weight: 0.3
+    divisibility_weight: 0.5

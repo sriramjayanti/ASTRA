@@ -1,0 +1,19 @@
+# ASTRA Synchronization Configuration
+synchronization:
+  cfo:
+    enable_coarse: true
+    enable_fine: true
+    coarse_method: "fft_fourth_power"   # fft_fourth_power, kay, fitz
+    search_range_hz: 50000.0
+    resolution_hz: 10.0
+  timing:
+    ted_algorithm: "gardner"             # gardner, mueller_muller, early_late
+    damping_factor: 0.707
+    loop_bandwidth: 0.05
+    resampling_filter: "polyphase"
+    interpolation_points: 32
+  carrier_phase:
+    costas_loop_order: 4                 # 2 for BPSK, 4 for QPSK/QAM
+    damping_factor: 0.707
+    loop_bandwidth: 0.02
+    max_phase_error_rad: 3.14159

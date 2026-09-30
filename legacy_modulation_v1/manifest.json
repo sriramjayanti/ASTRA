@@ -1,0 +1,57 @@
+{
+  "version": "legacy_modulation_v1",
+  "description": "Frozen snapshot of ASTRA modulation classification V1 architecture, weights, and metrics.",
+  "models": {
+    "resnet1d": {
+      "checkpoint": "checkpoints/astra_resnet1d_modulation_v2.pt",
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM"
+      ]
+    },
+    "spectrogram_cnn2d": {
+      "checkpoint": "checkpoints/astra_spectrogram_cnn_v2.pt",
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM"
+      ]
+    },
+    "legacy_cspb_cnn2d": {
+      "checkpoint": "outputs/CSPB.ML.2018R2/best_model.pt",
+      "classes": [
+        "bpsk",
+        "qpsk",
+        "8psk",
+        "dqpsk",
+        "msk",
+        "16qam",
+        "64qam",
+        "256qam"
+      ]
+    }
+  },
+  "fusion": {
+    "mode": "weighted_probability",
+    "weights": {
+      "resnet1d": 0.75,
+      "spectrogram2d": 0.25
+    }
+  },
+  "baseline_untouched_benchmark": "metrics/final_benchmark_results.json"
+}

@@ -1,0 +1,125 @@
+{
+  "oracle_demodulation": {
+    "BPSK": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 256
+    },
+    "QPSK": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 512
+    },
+    "8PSK": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 768
+    },
+    "DQPSK": {
+      "success": true,
+      "evm_percent": 76.54,
+      "bit_count": 512
+    },
+    "16QAM": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 1024
+    },
+    "64QAM": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 1536
+    },
+    "256QAM": {
+      "success": true,
+      "evm_percent": 0.0,
+      "bit_count": 2048
+    },
+    "2-FSK": {
+      "success": true,
+      "evm_percent": 29.26,
+      "bit_count": 256
+    },
+    "4-FSK": {
+      "success": true,
+      "evm_percent": 30.39,
+      "bit_count": 512
+    },
+    "MSK": {
+      "success": true,
+      "evm_percent": 30.34,
+      "bit_count": 256
+    }
+  },
+  "interleaver_audit": {
+    "status": "BROKEN",
+    "error": "Unsupported demodulation_variant format: <class 'numpy.ndarray'>"
+  },
+  "fec_audit": {
+    "status": "BROKEN",
+    "error": "FECTestingEngine.generate_candidates() missing 1 required positional argument: 'bit_count'"
+  },
+  "validation_audit": {
+    "engine_initialized": true,
+    "validation_output_type": "ValidationResult",
+    "status": "WORKING"
+  },
+  "scorer_audit": {
+    "status": "BROKEN",
+    "error": "object of type 'PipelineRankingResult' has no len()"
+  },
+  "higher_stages": {
+    "bitstream_intelligence": {
+      "status": "WORKING"
+    },
+    "transformer_structure": {
+      "status": "WORKING"
+    },
+    "payload_explorer": {
+      "status": "WORKING"
+    },
+    "explainability": {
+      "status": "WORKING"
+    }
+  },
+  "synthetic_payload": {
+    "original_payload": "hi hello",
+    "demod_bit_error_rate": 0.0,
+    "recovered_payload_text": "hi hello",
+    "exact_match": true
+  },
+  "noise_rejection": {
+    "AWGN": {
+      "predicted_mod": "UNKNOWN",
+      "unknown_prob": 0.0,
+      "confidence": 0.0
+    },
+    "CW": {
+      "predicted_mod": "UNKNOWN",
+      "unknown_prob": 0.0,
+      "confidence": 0.0
+    },
+    "Chirp": {
+      "predicted_mod": "UNKNOWN",
+      "unknown_prob": 0.0,
+      "confidence": 0.0
+    }
+  },
+  "silent_failures_count": 16,
+  "first_failure_stage_counts": {
+    "STAGE_3_MODULATION": 49,
+    "STAGE_4_BAUD_DSP": 24,
+    "STAGE_5_CANDIDATE_PAIRING": 0,
+    "STAGE_6_SYNC_CFO": 9,
+    "STAGE_6_SYNC_TIMING": 18,
+    "STAGE_6_SYNC_CARRIER": 0,
+    "STAGE_7_DEMOD_EVM": 0,
+    "SUCCESS_TO_STAGE_8": 0
+  },
+  "stage_latencies_mean_ms": {
+    "stage_3_modulation": 69.56,
+    "stage_4_baud": 981.99,
+    "stage_6_sync": 438.22,
+    "stage_7_demod": 59.74
+  }
+}

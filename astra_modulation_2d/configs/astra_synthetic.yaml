@@ -1,0 +1,72 @@
+# =====================================================================
+# ASTRA 2D Spectrogram Classifier Config — Mode B: ASTRA Synthetic (10-Class)
+# =====================================================================
+
+dataset:
+  name: "ASTRA_Synthetic_10Class"
+  type: "synthetic_unified"
+  root: "datasets/astra_fsk_enriched_v1"
+  additional_roots:
+    - "datasets/astra_training_dataset"
+  window_size: 2048
+  stride: 2048
+  windows_per_signal: 4
+  class_names:
+    - "2fsk"
+    - "4fsk"
+    - "bpsk"
+    - "qpsk"
+    - "8psk"
+    - "dqpsk"
+    - "msk"
+    - "16qam"
+    - "64qam"
+    - "256qam"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 42
+
+preprocessing:
+  dc_removal: true
+  rms_normalization: true
+  strict_finite: true
+  epsilon: 1.0e-8
+
+spectrogram:
+  n_fft: 128
+  hop_length: 32
+  win_length: 128
+  window: "hann"
+  fftshift: true
+  representation: "log_power"
+  normalization: "standard"
+  epsilon: 1.0e-8
+
+model:
+  version: "astra_spectrogram_cnn_v1"
+  base_channels: 32
+  stages:
+    - 64
+    - 128
+    - 256
+  blocks_per_stage:
+    - 2
+    - 2
+    - 2
+  se_attention: true
+  se_reduction: 16
+  embedding_dim: 256
+  dropout: 0.25
+
+training:
+  batch_size: 64
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adamw"
+  scheduler: "cosine"
+  mixed_precision: true
+  early_stopping_patience: 8

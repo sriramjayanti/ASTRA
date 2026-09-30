@@ -1,0 +1,17 @@
+# ASTRA DSP and Preprocessing Configuration
+dsp:
+  dc_removal: true
+  dc_filter_alpha: 0.995
+  normalize_rms: true
+  target_rms: 1.0
+  iq_imbalance_correction: true
+  filter_type: "rrc"       # root-raised cosine
+  rrc_alpha: 0.35
+  rrc_span: 16
+  max_samples_analysis: 500000
+  spectrogram:
+    nperseg: 256
+    noverlap: 128
+    window: "hann"
+    nfft: 256
+    scaling: "density"

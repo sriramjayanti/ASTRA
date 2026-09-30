@@ -1,0 +1,91 @@
+# ASTRA Synthetic Engine 4: Interleaver / Bit-Reordering Generator Configuration
+interleaver_generator:
+  version: "1.0.0"
+  master_seed: 42
+  bit_order: "msb_first"
+
+  enabled_types:
+    - "none"
+    - "block"
+    - "convolutional"
+    - "diagonal"
+    - "pseudo_random"
+
+  selection_probability:
+    none: 0.10
+    block: 0.30
+    convolutional: 0.25
+    diagonal: 0.15
+    pseudo_random: 0.20
+
+  padding:
+    default_mode: "zeros"
+
+  default_profiles:
+    none: "none"
+    block: "block_16x32"
+    convolutional: "conv_b4_d2"
+    diagonal: "diag_8x8"
+    pseudo_random: "pr_256"
+
+  block:
+    profiles:
+      - name: "block_8x8"
+        rows: 8
+        columns: 8
+        write_order: "row_major"
+        read_order: "column_major"
+
+      - name: "block_16x16"
+        rows: 16
+        columns: 16
+        write_order: "row_major"
+        read_order: "column_major"
+
+      - name: "block_16x32"
+        rows: 16
+        columns: 32
+        write_order: "row_major"
+        read_order: "column_major"
+
+      - name: "block_32x32"
+        rows: 32
+        columns: 32
+        write_order: "row_major"
+        read_order: "column_major"
+
+  convolutional:
+    profiles:
+      - name: "conv_b4_d2"
+        num_branches: 4
+        delay_step: 2
+
+      - name: "conv_b8_d4"
+        num_branches: 8
+        delay_step: 4
+
+  diagonal:
+    profiles:
+      - name: "diag_8x8"
+        rows: 8
+        columns: 8
+        direction: "top_left_to_bottom_right"
+
+      - name: "diag_16x16"
+        rows: 16
+        columns: 16
+        direction: "top_left_to_bottom_right"
+
+  pseudo_random:
+    profiles:
+      - name: "pr_256"
+        block_size: 256
+        seed: 42
+
+      - name: "pr_512"
+        block_size: 512
+        seed: 42
+
+      - name: "pr_1024"
+        block_size: 1024
+        seed: 42

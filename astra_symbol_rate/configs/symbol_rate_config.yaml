@@ -1,0 +1,81 @@
+# ASTRA Symbol-Rate (Baud) Estimation Engine Configuration
+version: "1.0.0"
+
+symbol_rate:
+  # General
+  model_version: "astra_symbol_rate_xgb_v1.0"
+  top_k: 3
+
+  # Candidate Generation & Deduplication
+  candidate_merge_tolerance_percent: 2.0  # Cluster candidates within +-2%
+  correct_tolerance_percent: 2.0          # Label correctness threshold for training
+  max_raw_candidates: 30
+  max_merged_candidates: 12
+
+  # Standard Baud-Rate Priors (supporting hints, not restrictive)
+  standard_rates:
+    enabled: true
+    values:
+      - 300
+      - 600
+      - 1200
+      - 2400
+      - 4800
+      - 9600
+      - 19200
+      - 38400
+      - 56000
+      - 57600
+      - 115200
+      - 250000
+      - 500000
+      - 1000000
+
+  # DSP Estimator Modules Enablement
+  dsp:
+    autocorrelation:
+      enabled: true
+      min_sps: 2.0
+      max_sps: 256.0
+      prominence_threshold: 0.15
+
+    magnitude_squared:
+      enabled: true
+
+    instantaneous_frequency:
+      enabled: true
+      prominence_threshold: 0.12
+
+    spectral:
+      enabled: true
+      fft_size: 4096
+
+    bandwidth_rrc:
+      enabled: true
+      rolloff_alphas: [0.20, 0.25, 0.35, 0.50]
+
+    cyclostationary:
+      enabled: true
+      num_cyclic_bins: 64
+
+  # XGBoost Ranker Configuration
+  xgboost:
+    enabled: true
+    objective: "binary:logistic"
+    eval_metric: "logloss"
+    n_estimators: 300
+    max_depth: 5
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 3.0
+    random_state: 42
+    early_stopping_rounds: 25
+
+  # ASTRA Status Confidence Thresholds
+  thresholds:
+    confirmed: 0.82
+    estimated: 0.50
+    possible: 0.28
+    confirmed_margin: 0.18
+    min_support_count_confirmed: 2

@@ -1,0 +1,101 @@
+profiles:
+  - profile_id: "astra_demo_v1"
+    version: "1.0.0"
+    schema_version: "profile_schema_v1"
+    description: "Standard ASTRA synthetic framed telemetry profile"
+    frame:
+      length_bits: 512
+      variable_length: false
+    sync:
+      pattern_hex: "EB90"
+      offset_bits: 0
+      length_bits: 16
+    header:
+      offset_bits: 16
+      length_bits: 32
+      fields:
+        - name: "sequence"
+          offset_bits: 16
+          width_bits: 8
+          type: "uint"
+          endian: "big"
+          description: "Monotonic 8-bit frame counter"
+        - name: "flags"
+          offset_bits: 24
+          width_bits: 8
+          type: "bitfield"
+          bit_flags:
+            0: "ACK_REQ"
+            1: "ENCRYPTED"
+            2: "COMPRESSED"
+            3: "RESERVED"
+        - name: "payload_length"
+          offset_bits: 32
+          width_bits: 16
+          type: "uint"
+          endian: "big"
+          unit: "bytes"
+    payload:
+      offset_bits: 48
+      length_bits: 448
+    crc:
+      present: true
+      offset_bits: 496
+      width_bits: 16
+      polynomial: "0x1021" # CRC-16-CCITT
+
+  - profile_id: "ccsds_telemetry_packet"
+    version: "1.0.0"
+    schema_version: "profile_schema_v1"
+    description: "CCSDS Space Packet Protocol Framing"
+    frame:
+      length_bits: 1024
+      variable_length: true
+    sync:
+      pattern_hex: "1ACFFC1D"
+      offset_bits: 0
+      length_bits: 32
+    header:
+      offset_bits: 32
+      length_bits: 48
+      fields:
+        - name: "version_number"
+          offset_bits: 32
+          width_bits: 3
+          type: "uint"
+          expected_value: 0
+        - name: "packet_type"
+          offset_bits: 35
+          width_bits: 1
+          type: "enum"
+          enum_map:
+            0: "TELEMETRY"
+            1: "TELECOMMAND"
+        - name: "sec_hdr_flag"
+          offset_bits: 36
+          width_bits: 1
+          type: "boolean"
+        - name: "apid"
+          offset_bits: 37
+          width_bits: 11
+          type: "uint"
+        - name: "sequence_flags"
+          offset_bits: 48
+          width_bits: 2
+          type: "uint"
+        - name: "packet_sequence_count"
+          offset_bits: 50
+          width_bits: 14
+          type: "uint"
+        - name: "packet_data_length"
+          offset_bits: 64
+          width_bits: 16
+          type: "uint"
+          unit: "bytes_minus_one"
+    payload:
+      offset_bits: 80
+      length_from_field: "packet_data_length"
+    crc:
+      present: true
+      width_bits: 16
+      position: "trailer"

@@ -1,0 +1,285 @@
+{
+  "benchmark_name": "ASTRA_FINAL_TEST_SET_V2_BLIND",
+  "total_captures": 1100,
+  "execution_time_seconds": 17.74,
+  "metrics": {
+    "Modulation Top-1": 40.36,
+    "Modulation Top-3": 65.36,
+    "Macro-F1": 0.3354,
+    "Noise false-positive rate": 5.8
+  },
+  "per_class": {
+    "2-FSK": {
+      "precision": 0.2586,
+      "recall": 0.75,
+      "f1": 0.3846,
+      "support": 100,
+      "top1_accuracy": 75.0,
+      "top3_accuracy": 99.0
+    },
+    "4-FSK": {
+      "precision": 0.3491,
+      "recall": 0.74,
+      "f1": 0.4744,
+      "support": 100,
+      "top1_accuracy": 74.0,
+      "top3_accuracy": 99.0
+    },
+    "BPSK": {
+      "precision": 0.9457,
+      "recall": 0.87,
+      "f1": 0.9062,
+      "support": 100,
+      "top1_accuracy": 87.0,
+      "top3_accuracy": 98.0
+    },
+    "QPSK": {
+      "precision": 0.5,
+      "recall": 0.02,
+      "f1": 0.0385,
+      "support": 100,
+      "top1_accuracy": 2.0,
+      "top3_accuracy": 12.0
+    },
+    "8PSK": {
+      "precision": 0.1667,
+      "recall": 0.01,
+      "f1": 0.0189,
+      "support": 100,
+      "top1_accuracy": 1.0,
+      "top3_accuracy": 17.0
+    },
+    "DQPSK": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 100,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 1.0
+    },
+    "MSK": {
+      "precision": 0.0513,
+      "recall": 0.02,
+      "f1": 0.0288,
+      "support": 100,
+      "top1_accuracy": 2.0,
+      "top3_accuracy": 21.0
+    },
+    "16QAM": {
+      "precision": 0.3537,
+      "recall": 0.29,
+      "f1": 0.3187,
+      "support": 100,
+      "top1_accuracy": 29.0,
+      "top3_accuracy": 93.0
+    },
+    "64QAM": {
+      "precision": 0.3659,
+      "recall": 0.45,
+      "f1": 0.4036,
+      "support": 100,
+      "top1_accuracy": 45.0,
+      "top3_accuracy": 88.0
+    },
+    "256QAM": {
+      "precision": 0.3895,
+      "recall": 0.37,
+      "f1": 0.3795,
+      "support": 100,
+      "top1_accuracy": 37.0,
+      "top3_accuracy": 91.0
+    },
+    "UNKNOWN": {
+      "precision": 0.6133,
+      "recall": 0.92,
+      "f1": 0.736,
+      "support": 100,
+      "top1_accuracy": 92.0,
+      "top3_accuracy": 100.0
+    }
+  },
+  "snr_breakdown": {
+    "< 0 dB": {
+      "accuracy": 37.5,
+      "count": 248
+    },
+    "0-5 dB": {
+      "accuracy": 44.8,
+      "count": 125
+    },
+    "5-10 dB": {
+      "accuracy": 40.59,
+      "count": 202
+    },
+    "10-15 dB": {
+      "accuracy": 37.14,
+      "count": 175
+    },
+    "15-20 dB": {
+      "accuracy": 42.77,
+      "count": 166
+    },
+    "> 20 dB": {
+      "accuracy": 41.85,
+      "count": 184
+    }
+  },
+  "confusion_matrix": [
+    [
+      75,
+      18,
+      0,
+      0,
+      0,
+      0,
+      4,
+      1,
+      0,
+      0,
+      2
+    ],
+    [
+      22,
+      74,
+      0,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      2,
+      0,
+      87,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      10
+    ],
+    [
+      49,
+      10,
+      3,
+      2,
+      2,
+      1,
+      24,
+      5,
+      0,
+      0,
+      4
+    ],
+    [
+      66,
+      9,
+      0,
+      1,
+      1,
+      4,
+      7,
+      6,
+      3,
+      0,
+      3
+    ],
+    [
+      0,
+      69,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      3,
+      3,
+      23
+    ],
+    [
+      65,
+      20,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      0,
+      1,
+      11
+    ],
+    [
+      4,
+      0,
+      2,
+      1,
+      1,
+      0,
+      0,
+      29,
+      35,
+      25,
+      3
+    ],
+    [
+      3,
+      2,
+      0,
+      0,
+      2,
+      1,
+      0,
+      17,
+      45,
+      29,
+      1
+    ],
+    [
+      1,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      37,
+      37,
+      0
+    ],
+    [
+      3,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      92
+    ]
+  ],
+  "classes": [
+    "2-FSK",
+    "4-FSK",
+    "BPSK",
+    "QPSK",
+    "8PSK",
+    "DQPSK",
+    "MSK",
+    "16QAM",
+    "64QAM",
+    "256QAM",
+    "UNKNOWN"
+  ]
+}

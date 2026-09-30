@@ -1,0 +1,164 @@
+profiles:
+  # ========================================================
+  # 1. CONVOLUTIONAL PROFILES
+  # ========================================================
+  conv_k7_r12_nasa:
+    profile_id: "conv_k7_r12_nasa"
+    family: "convolutional"
+    constraint_length: 7
+    rate: 0.5
+    rate_str: "1/2"
+    generators_octal: [171, 133]  # NASA standard (133, 171 or 171, 133)
+    termination: "terminated"
+    puncturing_pattern: null
+    description: "Standard NASA/CCSDS Convolutional Code K=7, Rate 1/2"
+
+  conv_k7_r23_punctured:
+    profile_id: "conv_k7_r23_punctured"
+    family: "convolutional"
+    constraint_length: 7
+    rate: 0.6666666667
+    rate_str: "2/3"
+    generators_octal: [171, 133]
+    termination: "terminated"
+    puncturing_pattern: [1, 1, 0, 1]  # Punctures every 4th code bit
+    description: "Punctured Convolutional Code K=7, Rate 2/3"
+
+  conv_k7_r34_punctured:
+    profile_id: "conv_k7_r34_punctured"
+    family: "convolutional"
+    constraint_length: 7
+    rate: 0.75
+    rate_str: "3/4"
+    generators_octal: [171, 133]
+    termination: "terminated"
+    puncturing_pattern: [1, 1, 0, 1, 1, 0]  # Punctured Rate 3/4
+    description: "Punctured Convolutional Code K=7, Rate 3/4"
+
+  conv_k5_r12_standard:
+    profile_id: "conv_k5_r12_standard"
+    family: "convolutional"
+    constraint_length: 5
+    rate: 0.5
+    rate_str: "1/2"
+    generators_octal: [23, 35]
+    termination: "terminated"
+    puncturing_pattern: null
+    description: "Compact Convolutional Code K=5, Rate 1/2"
+
+  conv_k3_r12_simple:
+    profile_id: "conv_k3_r12_simple"
+    family: "convolutional"
+    constraint_length: 3
+    rate: 0.5
+    rate_str: "1/2"
+    generators_octal: [7, 5]
+    termination: "terminated"
+    puncturing_pattern: null
+    description: "Simple Convolutional Code K=3, Rate 1/2"
+
+  # ========================================================
+  # 2. REED-SOLOMON PROFILES
+  # ========================================================
+  rs_255_223_ccsds:
+    profile_id: "rs_255_223_ccsds"
+    family: "reed_solomon"
+    n: 255
+    k: 223
+    symbol_bits: 8
+    prim_poly: 0x187  # x^8 + x^7 + x^2 + x + 1 (CCSDS convention)
+    fcr: 112          # First consecutive root
+    shortened_n: null
+    shortened_k: null
+    description: "CCSDS Standard RS(255, 223) t=16 Error Correction"
+
+  rs_255_239_standard:
+    profile_id: "rs_255_239_standard"
+    family: "reed_solomon"
+    n: 255
+    k: 239
+    symbol_bits: 8
+    prim_poly: 0x11D  # x^8 + x^4 + x^3 + x^2 + 1
+    fcr: 0
+    shortened_n: null
+    shortened_k: null
+    description: "Standard RS(255, 239) t=8 Error Correction"
+
+  rs_64_48_compact:
+    profile_id: "rs_64_48_compact"
+    family: "reed_solomon"
+    n: 64
+    k: 48
+    symbol_bits: 6
+    prim_poly: 0x43   # x^6 + x + 1
+    fcr: 1
+    shortened_n: null
+    shortened_k: null
+    description: "Compact 6-bit RS(64, 48) t=8 Error Correction"
+
+  rs_32_24_shortened:
+    profile_id: "rs_32_24_shortened"
+    family: "reed_solomon"
+    n: 255
+    k: 247
+    symbol_bits: 8
+    prim_poly: 0x11D
+    fcr: 0
+    shortened_n: 32
+    shortened_k: 24
+    description: "Shortened RS(32, 24) from RS(255, 247) t=4"
+
+  # ========================================================
+  # 3. LDPC PROFILES
+  # ========================================================
+  ldpc_128_r12:
+    profile_id: "ldpc_128_r12"
+    family: "ldpc"
+    n: 128
+    k: 64
+    rate: 0.5
+    rate_str: "1/2"
+    matrix_type: "quasi_cyclic"
+    block_size: 16
+    description: "Standard Quasi-Cyclic LDPC(128, 64) Rate 1/2"
+
+  ldpc_256_r12:
+    profile_id: "ldpc_256_r12"
+    family: "ldpc"
+    n: 256
+    k: 128
+    rate: 0.5
+    rate_str: "1/2"
+    matrix_type: "quasi_cyclic"
+    block_size: 32
+    description: "Standard Quasi-Cyclic LDPC(256, 128) Rate 1/2"
+
+  ldpc_512_r12:
+    profile_id: "ldpc_512_r12"
+    family: "ldpc"
+    n: 512
+    k: 256
+    rate: 0.5
+    rate_str: "1/2"
+    matrix_type: "quasi_cyclic"
+    block_size: 64
+    description: "Standard Quasi-Cyclic LDPC(512, 256) Rate 1/2"
+
+  # ========================================================
+  # 4. CONCATENATED PROFILES
+  # ========================================================
+  concat_rs255_convk7:
+    profile_id: "concat_rs255_convk7"
+    family: "concatenated"
+    outer_profile: "rs_255_223_ccsds"
+    inner_profile: "conv_k7_r12_nasa"
+    interleaving: "block_16x16"
+    description: "Classic NASA/ESA Concatenated Outer RS(255,223) + Inner Conv K=7 R=1/2"
+
+  concat_rs32_convk5:
+    profile_id: "concat_rs32_convk5"
+    family: "concatenated"
+    outer_profile: "rs_32_24_shortened"
+    inner_profile: "conv_k5_r12_standard"
+    interleaving: "none"
+    description: "Compact Concatenated Outer RS(32,24) + Inner Conv K=5 R=1/2"

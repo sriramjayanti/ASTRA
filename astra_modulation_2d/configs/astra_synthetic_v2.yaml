@@ -1,0 +1,81 @@
+# =====================================================================
+# ASTRA 2D Spectrogram Classifier Config — Mode B: ASTRA Synthetic V2 (10-Class)
+# =====================================================================
+
+dataset:
+  name: "ASTRA_MODULATION_SYNTHETIC_V2"
+  type: "synthetic_unified"
+  root: "datasets/ASTRA_MODULATION_SYNTHETIC_V2"
+  window_size: 2048
+  stride: 2048
+  windows_per_signal: 4
+  class_names:
+    - "2-FSK"
+    - "4-FSK"
+    - "BPSK"
+    - "QPSK"
+    - "8PSK"
+    - "DQPSK"
+    - "MSK"
+    - "16QAM"
+    - "64QAM"
+    - "256QAM"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 42
+
+preprocessing:
+  dc_removal: true
+  rms_normalization: true
+  strict_finite: true
+  epsilon: 1.0e-8
+
+spectrogram:
+  n_fft: 128
+  hop_length: 32
+  win_length: 128
+  window: "hann"
+  fftshift: true
+  representation: "log_power"
+  normalization: "standard"
+  epsilon: 1.0e-8
+
+model:
+  version: "astra_spectrogram_cnn_v2"
+  base_channels: 32
+  stages:
+    - 64
+    - 128
+    - 256
+  blocks_per_stage:
+    - 2
+    - 2
+    - 2
+  se_attention: true
+  se_reduction: 16
+  fc_hidden: 256
+  dropout: 0.30
+  num_classes: 10
+  classes:
+    - "2-FSK"
+    - "4-FSK"
+    - "BPSK"
+    - "QPSK"
+    - "8PSK"
+    - "DQPSK"
+    - "MSK"
+    - "16QAM"
+    - "64QAM"
+    - "256QAM"
+
+training:
+  epochs: 10
+  batch_size: 128
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-4
+  patience: 4
+  optimizer: "AdamW"
+  scheduler: "CosineAnnealingLR"

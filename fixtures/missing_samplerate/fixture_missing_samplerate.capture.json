@@ -1,0 +1,16 @@
+{
+  "capture_record_id": "cap_000014",
+  "file_name": "fixture_missing_samplerate.iq",
+  "file_format": "raw_iq",
+  "sample_rate_hz": null,
+  "center_frequency_hz": null,
+  "sample_count_complex": 16441,
+  "scalar_sample_count": 32882,
+  "duration_seconds": 0.08563,
+  "storage_dtype": "float32",
+  "endianness": "little",
+  "iq_order": "IQ",
+  "channel_count": 2,
+  "file_size_bytes": 131528,
+  "file_sha256": "53a714a89eb8137adb19e9988bd655cf59660db6cc5a98afcb6f4c79d5987c95"
+}

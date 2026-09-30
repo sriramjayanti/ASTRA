@@ -1,0 +1,55 @@
+{
+  "capture_record_id": "cap_000014",
+  "channel_record_id": "chan_000001",
+  "modulation_record_id": "mod_000001",
+  "interleaver_record_id": "int_000001",
+  "fec_record_id": "fec_000001",
+  "frame_id": "frame_000001",
+  "file_path": "fixtures\\missing_samplerate\\fixture_missing_samplerate.iq",
+  "file_format": "raw_iq",
+  "sample_rate_hz_truth": 192000.0,
+  "sample_rate_visible": false,
+  "center_frequency_hz": null,
+  "sample_count_complex": 16441,
+  "scalar_sample_count": 32882,
+  "duration_seconds": 0.08563,
+  "storage_dtype": "float32",
+  "endianness": "little",
+  "iq_order": "IQ",
+  "channel_count": 2,
+  "quantization": {
+    "enabled": false,
+    "bits": null,
+    "scale": null,
+    "mse": null,
+    "snr_db": null
+  },
+  "clipping": {
+    "enabled": false,
+    "clipped_sample_count": 0
+  },
+  "source_iq_sha256": "53a714a89eb8137adb19e9988bd655cf59660db6cc5a98afcb6f4c79d5987c95",
+  "file_sha256": "53a714a89eb8137adb19e9988bd655cf59660db6cc5a98afcb6f4c79d5987c95",
+  "file_size_bytes": 131528,
+  "visible_metadata_path": null,
+  "truth_metadata_path": null,
+  "parameters": {
+    "description": "Evaluation profile where sample rate is masked from visible metadata",
+    "format": "raw_iq",
+    "dtype": "float32",
+    "endianness": "little",
+    "iq_order": "IQ",
+    "sample_rate_visible": false
+  },
+  "metadata": {
+    "generator": "ASTRA Capture Generator",
+    "version": "1.0.0",
+    "seed": 140140,
+    "profile_name": "missing_samplerate_test",
+    "channel_record_id": "chan_000001",
+    "modulation_record_id": "mod_000001",
+    "interleaver_record_id": "int_000001",
+    "fec_record_id": "fec_000001",
+    "frame_id": "frame_000001"
+  }
+}

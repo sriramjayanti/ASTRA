@@ -1,0 +1,10 @@
+[
+  "bpsk",
+  "qpsk",
+  "8psk",
+  "dqpsk",
+  "msk",
+  "16qam",
+  "64qam",
+  "256qam"
+]

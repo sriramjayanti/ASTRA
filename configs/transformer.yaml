@@ -1,0 +1,22 @@
+# ASTRA Bitstream Transformer Configuration
+transformer:
+  model:
+    vocab_size: 4                     # 0, 1, PAD, UNK
+    d_model: 128
+    nhead: 4
+    num_layers: 4
+    dim_feedforward: 256
+    dropout: 0.1
+    max_seq_len: 2048
+  token_classes:
+    - "PREAMBLE"
+    - "SYNC_WORD"
+    - "HEADER"
+    - "PAYLOAD"
+    - "CRC"
+    - "PADDING"
+    - "UNKNOWN"
+  inference:
+    window_size: 1024
+    stride: 512
+    device: "auto"

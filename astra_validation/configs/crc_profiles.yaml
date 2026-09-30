@@ -1,0 +1,77 @@
+profiles:
+  crc8_atm:
+    name: "CRC-8/ATM"
+    width: 8
+    poly: 0x07
+    init: 0x00
+    refin: false
+    refout: false
+    xorout: 0x00
+    check: 0xF4  # Check value for ASCII "123456789"
+    description: "ATM HEC CRC-8 (x^8 + x^2 + x + 1)"
+
+  crc8_bluetooth:
+    name: "CRC-8/BLUETOOTH"
+    width: 8
+    poly: 0xA7
+    init: 0x00
+    refin: true
+    refout: true
+    xorout: 0x00
+    check: 0x26
+    description: "Bluetooth CRC-8"
+
+  crc16_ccitt_false:
+    name: "CRC-16/CCITT-FALSE"
+    width: 16
+    poly: 0x1021
+    init: 0xFFFF
+    refin: false
+    refout: false
+    xorout: 0x0000
+    check: 0x29B1  # Check for "123456789"
+    description: "Standard Aerospace/CCSDS/HDLC CRC-16 (x^16 + x^12 + x^5 + 1)"
+
+  crc16_ibm:
+    name: "CRC-16/IBM"
+    width: 16
+    poly: 0x8005
+    init: 0x0000
+    refin: true
+    refout: true
+    xorout: 0x0000
+    check: 0xBB3D
+    description: "Modbus/USB CRC-16 (x^16 + x^15 + x^2 + 1)"
+
+  crc16_xmodem:
+    name: "CRC-16/XMODEM"
+    width: 16
+    poly: 0x1021
+    init: 0x0000
+    refin: false
+    refout: false
+    xorout: 0x0000
+    check: 0x31C3
+    description: "XMODEM / ACORN CRC-16"
+
+  crc32_ieee:
+    name: "CRC-32/IEEE"
+    width: 32
+    poly: 0x04C11DB7
+    init: 0xFFFFFFFF
+    refin: true
+    refout: true
+    xorout: 0xFFFFFFFF
+    check: 0xCBF43926  # Standard Ethernet/ZIP/PNG CRC-32 check
+    description: "IEEE 802.3 Ethernet standard CRC-32"
+
+  crc32_bzip2:
+    name: "CRC-32/BZIP2"
+    width: 32
+    poly: 0x04C11DB7
+    init: 0xFFFFFFFF
+    refin: false
+    refout: false
+    xorout: 0xFFFFFFFF
+    check: 0xFC891918
+    description: "BZIP2 / AAL5 CRC-32"

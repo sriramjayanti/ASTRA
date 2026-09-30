@@ -1,0 +1,72 @@
+{
+  "manifest_version": "2.0.0",
+  "class_schema_version": "modulation_classes_v2",
+  "classes": [
+    "2-FSK",
+    "4-FSK",
+    "BPSK",
+    "QPSK",
+    "8PSK",
+    "DQPSK",
+    "MSK",
+    "16QAM",
+    "64QAM",
+    "256QAM",
+    "UNKNOWN"
+  ],
+  "num_classes": 11,
+  "dataset_version": "ASTRA_MODULATION_DATASET_V2",
+  "models": {
+    "astra_resnet1d_modulation_v2": {
+      "model_id": "astra_resnet1d_modulation_v2",
+      "architecture": "ResNet1DV2",
+      "file_path": "checkpoints\\astra_resnet1d_v2.pt",
+      "sha256": "7e0122b28cf93e3137bbf6e0b3303b2f0cbd8b9226724d96ec7edeb7dca7d8bc",
+      "input_shape": [
+        2,
+        2048
+      ],
+      "preprocessing": "IQPreprocessorV2 (DC removal + RMS normalization)",
+      "metrics": {
+        "test_top1": 56.81,
+        "test_top3": 93.62,
+        "test_macro_f1": 0.5853,
+        "ood_top1": 30.45
+      }
+    },
+    "astra_spectrogram_cnn_modulation_v2": {
+      "model_id": "astra_spectrogram_cnn_modulation_v2",
+      "architecture": "SpectrogramCNN2DV2",
+      "file_path": "checkpoints\\astra_spectrogram_cnn_v2.pt",
+      "sha256": "f375b9df10eec412a682379b0cd0d0c8587f1020c1da7ea4e4c0167ea9510e69",
+      "input_shape": [
+        1,
+        128,
+        128
+      ],
+      "preprocessing": "Centered Log-Power STFT [128x128] + Standardized",
+      "metrics": {
+        "test_top1": 54.71,
+        "test_top3": 90.29,
+        "test_macro_f1": 0.5668,
+        "ood_top1": 33.94
+      }
+    },
+    "astra_fusion_modulation_v2": {
+      "model_id": "astra_fusion_modulation_v2",
+      "mode": "calibrated_weighted_probability",
+      "weights": {
+        "w_1d": 0.5,
+        "w_2d": 0.5
+      },
+      "rf_support_beta": 0.25,
+      "test_top1": 57.9,
+      "test_top3": 92.29,
+      "test_macro_f1": 0.5969,
+      "blind_benchmark_top1": 40.36,
+      "blind_benchmark_top3": 65.36,
+      "blind_benchmark_macro_f1": 0.3354,
+      "blind_benchmark_noise_fpr": 5.8
+    }
+  }
+}

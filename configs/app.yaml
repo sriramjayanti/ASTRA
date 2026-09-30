@@ -1,0 +1,23 @@
+# ASTRA Central Application Configuration
+app:
+  name: "ASTRA"
+  version: "1.0.0"
+  description: "Automated Signal Analysis & Recovery Assistant"
+  environment: "production"
+  debug: false
+  log_level: "INFO"
+  structured_logging: false
+  random_seed: 42
+
+hardware:
+  device: "auto"        # "auto", "cpu", "cuda", "directml"
+  num_workers: 4
+  max_memory_mb: 8192
+  gpu_oom_fallback: true
+  batch_size: 16
+
+storage:
+  output_dir: "outputs"
+  logs_dir: "logs"
+  cache_dir: ".cache"
+  checkpoints_dir: "checkpoints"

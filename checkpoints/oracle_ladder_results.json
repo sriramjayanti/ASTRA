@@ -1,0 +1,140 @@
+{
+  "total_evaluated": 100,
+  "baud_top1_accuracy": 44.0,
+  "baud_top3_accuracy": 57.0,
+  "rung_a_accuracy": 100.0,
+  "rung_b_accuracy": 100.0,
+  "rung_c_top1_accuracy": 78.0,
+  "rung_c_top3_accuracy": 80.0,
+  "rung_d_top1_accuracy": 74.0,
+  "rung_d_top3_accuracy": 77.0,
+  "snr_breakdown": {
+    "high": {
+      "total": 40,
+      "rung_a": 40,
+      "rung_b": 40,
+      "rung_c": 38,
+      "rung_c_top3": 39,
+      "rung_d": 37,
+      "rung_d_top3": 38,
+      "baud_top1": 22,
+      "baud_top3": 29
+    },
+    "med": {
+      "total": 28,
+      "rung_a": 28,
+      "rung_b": 28,
+      "rung_c": 27,
+      "rung_c_top3": 27,
+      "rung_d": 25,
+      "rung_d_top3": 26,
+      "baud_top1": 18,
+      "baud_top3": 18
+    },
+    "low": {
+      "total": 32,
+      "rung_a": 32,
+      "rung_b": 32,
+      "rung_c": 13,
+      "rung_c_top3": 14,
+      "rung_d": 12,
+      "rung_d_top3": 13,
+      "baud_top1": 4,
+      "baud_top3": 10
+    }
+  },
+  "per_class_rung_b": {
+    "8PSK": {
+      "total": 14,
+      "success": 14
+    },
+    "256QAM": {
+      "total": 7,
+      "success": 7
+    },
+    "16QAM": {
+      "total": 13,
+      "success": 13
+    },
+    "4-FSK": {
+      "total": 10,
+      "success": 10
+    },
+    "QPSK": {
+      "total": 12,
+      "success": 12
+    },
+    "MSK": {
+      "total": 13,
+      "success": 13
+    },
+    "64QAM": {
+      "total": 11,
+      "success": 11
+    },
+    "BPSK": {
+      "total": 5,
+      "success": 5
+    },
+    "DQPSK": {
+      "total": 7,
+      "success": 7
+    },
+    "2-FSK": {
+      "total": 8,
+      "success": 8
+    }
+  },
+  "per_class_rung_c": {
+    "8PSK": {
+      "total": 14,
+      "success": 7,
+      "success_top3": 7
+    },
+    "256QAM": {
+      "total": 7,
+      "success": 7,
+      "success_top3": 7
+    },
+    "16QAM": {
+      "total": 13,
+      "success": 12,
+      "success_top3": 12
+    },
+    "4-FSK": {
+      "total": 10,
+      "success": 10,
+      "success_top3": 10
+    },
+    "QPSK": {
+      "total": 12,
+      "success": 7,
+      "success_top3": 8
+    },
+    "MSK": {
+      "total": 13,
+      "success": 13,
+      "success_top3": 13
+    },
+    "64QAM": {
+      "total": 11,
+      "success": 11,
+      "success_top3": 11
+    },
+    "BPSK": {
+      "total": 5,
+      "success": 2,
+      "success_top3": 2
+    },
+    "DQPSK": {
+      "total": 7,
+      "success": 2,
+      "success_top3": 2
+    },
+    "2-FSK": {
+      "total": 8,
+      "success": 7,
+      "success_top3": 8
+    }
+  }
+}

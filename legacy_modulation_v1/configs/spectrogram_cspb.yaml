@@ -1,0 +1,70 @@
+# =====================================================================
+# ASTRA 2D Spectrogram Classifier Config — Mode A: CSPB.ML.2018R2
+# =====================================================================
+
+dataset:
+  name: "CSPB.ML.2018R2"
+  type: "cspb"
+  root: "ASTRA_Modulation_Model_Starter/ASTRA_Modulation_Model_Starter/data"
+  window_size: 2048
+  stride: 2048
+  windows_per_signal: 4
+  class_names:
+    - "bpsk"
+    - "qpsk"
+    - "8psk"
+    - "dqpsk"
+    - "msk"
+    - "16qam"
+    - "64qam"
+    - "256qam"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 42
+  split_file: "ASTRA_Modulation_Model_Starter/ASTRA_Modulation_Model_Starter/data/cspb_splits.json"
+
+preprocessing:
+  dc_removal: true
+  rms_normalization: true
+  strict_finite: true
+  epsilon: 1.0e-8
+
+spectrogram:
+  n_fft: 128
+  hop_length: 32
+  win_length: 128
+  window: "hann"
+  fftshift: true
+  representation: "log_power"
+  normalization: "standard" # standard (zero-mean unit-variance) or min_max
+  epsilon: 1.0e-8
+
+model:
+  version: "astra_spectrogram_cnn_v1"
+  base_channels: 32
+  stages:
+    - 64
+    - 128
+    - 256
+  blocks_per_stage:
+    - 2
+    - 2
+    - 2
+  se_attention: true
+  se_reduction: 16
+  embedding_dim: 256
+  dropout: 0.25
+
+training:
+  batch_size: 64
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adamw"
+  scheduler: "cosine"
+  mixed_precision: true
+  early_stopping_patience: 8
+  max_signals_per_class: null # null for all available verified signals

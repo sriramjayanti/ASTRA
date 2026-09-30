@@ -1,0 +1,31 @@
+# ASTRA Desktop Workstation Configuration
+app:
+  name: "ASTRA — Signal Intelligence & Recovery Workstation"
+  version: "1.0.0"
+  stage: 16
+  organization: "ASTRA SIH Team"
+  high_dpi_scaling: true
+
+window:
+  default_width: 1720
+  default_height: 980
+  min_width: 1366
+  min_height: 768
+  maximized: true
+
+performance:
+  target_fps: 60
+  min_fps: 30
+  max_particles: 100000
+  decimation_threshold: 65536
+  cache_memory_mb: 512
+  lod_enabled: true
+  quality_preset: "HIGH" # LOW, BALANCED, HIGH, ULTRA
+
+features:
+  reduced_motion: false
+  cinematic_camera_enabled: true
+  particles_enabled: true
+  auto_replay: false
+  show_tooltips: true
+  beginner_mode: false

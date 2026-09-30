@@ -1,0 +1,195 @@
+# =====================================================================
+# ASTRA Synthetic Engine 6 — RF / Channel Impairment Configuration
+# =====================================================================
+
+channel_generator:
+  version: "1.0.0"
+  master_seed: 42
+
+  # Default distribution parameters for random generation
+  snr_db:
+    mode: random_uniform
+    min: -10.0
+    max: 30.0
+
+  cfo_hz:
+    mode: random_uniform
+    min: -5000.0
+    max: 5000.0
+
+  phase_offset_rad:
+    mode: random_uniform
+    min: -3.14159265
+    max: 3.14159265
+
+  timing_offset_samples:
+    mode: random_uniform
+    min: -0.5
+    max: 0.5
+
+  gain_db:
+    mode: random_uniform
+    min: -10.0
+    max: 10.0
+
+  frequency_drift_hz_per_sec:
+    mode: random_uniform
+    min: -100.0
+    max: 100.0
+
+  sample_clock_offset_ppm:
+    mode: random_uniform
+    min: -40.0
+    max: 40.0
+
+# Predefined standard channel profiles
+profiles:
+  clean:
+    description: "Pristine control signal without any RF corruption"
+
+  awgn_only:
+    description: "Thermal AWGN across discrete SNR steps"
+    snr_db:
+      values: [-10.0, -5.0, 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
+
+  awgn_0db:
+    description: "Low-SNR AWGN verification at exactly 0 dB"
+    snr_db: 0.0
+
+  awgn_10db:
+    description: "Moderate AWGN verification at exactly 10 dB"
+    snr_db: 10.0
+
+  cfo_only:
+    description: "Carrier Frequency Offset stress test"
+    cfo_hz:
+      range: [-4000.0, 4000.0]
+
+  phase_only:
+    description: "Pure carrier phase rotation"
+    phase_offset_rad:
+      range: [-3.14159265, 3.14159265]
+
+  timing_only:
+    description: "Fractional and integer sample delay shift"
+    timing_offset_samples:
+      range: [-0.75, 0.75]
+
+  rayleigh_flat:
+    description: "Flat Rayleigh fading (no line-of-sight path)"
+    fading:
+      type: "rayleigh"
+
+  rician_mild:
+    description: "Rician fading with strong LOS component (K=10 dB)"
+    fading:
+      type: "rician"
+      k_factor_db: 10.0
+
+  rician_severe:
+    description: "Rician fading with weak LOS component (K=2 dB)"
+    fading:
+      type: "rician"
+      k_factor_db: 2.0
+
+  multipath_mild:
+    description: "Mild 3-tap multipath propagation FIR"
+    multipath:
+      enabled: true
+      profile: "mild"
+      normalize: true
+
+  multipath_medium:
+    description: "Medium 4-tap multipath propagation FIR"
+    multipath:
+      enabled: true
+      profile: "medium"
+      normalize: true
+
+  multipath_severe:
+    description: "Severe 5-tap multipath propagation FIR"
+    multipath:
+      enabled: true
+      profile: "severe"
+      normalize: true
+
+  interference_single_tone:
+    description: "Co-channel CW single-tone interferer"
+    interference:
+      enabled: true
+      freq_offset_hz: 1500.0
+      power_relative_db: -6.0
+
+  combined_easy:
+    description: "Easy combined profile: high SNR, mild CFO, tiny timing shift"
+    snr_db:
+      range: [15.0, 25.0]
+    cfo_hz:
+      range: [-500.0, 500.0]
+    phase_offset_rad:
+      range: [-0.5, 0.5]
+    timing_offset_samples:
+      range: [-0.2, 0.2]
+    gain_db:
+      range: [-2.0, 2.0]
+
+  combined_medium:
+    description: "Medium combined profile: moderate SNR, CFO, timing, phase, and mild multipath"
+    snr_db:
+      range: [5.0, 15.0]
+    cfo_hz:
+      range: [-2500.0, 2500.0]
+    phase_offset_rad:
+      range: [-3.14159265, 3.14159265]
+    timing_offset_samples:
+      range: [-0.5, 0.5]
+    gain_db:
+      range: [-6.0, 6.0]
+    multipath:
+      enabled: true
+      profile: "mild"
+      normalize: true
+
+  combined_hard:
+    description: "Hard combined profile: low SNR, heavy CFO, drift, Rician fading, and medium multipath"
+    snr_db:
+      range: [-5.0, 5.0]
+    cfo_hz:
+      range: [-6000.0, 6000.0]
+    frequency_drift_hz_per_sec:
+      range: [-150.0, 150.0]
+    phase_offset_rad:
+      range: [-3.14159265, 3.14159265]
+    timing_offset_samples:
+      range: [-0.75, 0.75]
+    gain_db:
+      range: [-10.0, 6.0]
+    fading:
+      type: "rician"
+      k_factor_db: 5.0
+    multipath:
+      enabled: true
+      profile: "medium"
+      normalize: true
+
+  satellite_like_v1:
+    description: "Simplified synthetic profile inspired by LEO satellite Doppler & link challenges"
+    snr_db:
+      range: [-2.0, 12.0]
+    cfo_hz:
+      range: [-8000.0, 8000.0]
+    frequency_drift_hz_per_sec:
+      range: [-200.0, 200.0]
+    phase_offset_rad:
+      range: [-3.14159265, 3.14159265]
+    gain_db:
+      range: [-8.0, 4.0]
+    timing_offset_samples:
+      range: [-0.4, 0.4]
+    fading:
+      type: "rician"
+      k_factor_db: 8.0
+    multipath:
+      enabled: true
+      profile: "mild"
+      normalize: true

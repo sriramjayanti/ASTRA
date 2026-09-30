@@ -1,0 +1,26 @@
+constellation:
+  version: "1.0.0"
+  
+  # Evaluated cluster counts for K-Means
+  evaluated_k_values: [2, 4, 8, 16, 64]
+  
+  # DBSCAN parameters
+  dbscan:
+    eps: 0.15
+    min_samples: 15
+    max_samples_fit: 4096
+
+  # Radial ring analysis
+  radial_rings:
+    bin_count: 64
+    prominence_ratio: 0.08
+    min_ring_distance: 0.10
+
+  # Metrics thresholds
+  thresholds:
+    confirmed_confidence: 0.80
+    estimated_confidence: 0.50
+    possible_confidence: 0.30
+    constant_modulus_variance_max: 0.08
+    psk_angular_uniformity_min: 0.70
+    qam_grid_compactness_min: 0.65

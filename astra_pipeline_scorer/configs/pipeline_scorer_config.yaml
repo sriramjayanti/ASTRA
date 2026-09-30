@@ -1,0 +1,50 @@
+pipeline_scorer:
+  version: "1.0.0"
+  model_name: "ASTRA_Pipeline_XGBoost_Scorer"
+  feature_schema_version: "pipeline_features_v1"
+  model_version: "astra_pipeline_xgb_v1"
+
+  # Ranking and top-k selection
+  top_k: 3
+  near_tie_margin: 0.05
+  min_confidence_confirmed: 0.80
+  min_confidence_estimated: 0.50
+  min_confidence_possible: 0.25
+
+  # XGBoost Model Hyperparameters
+  xgboost:
+    objective: "binary:logistic"
+    eval_metric: "logloss"
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 2
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    random_state: 42
+    early_stopping_rounds: 30
+    tree_method: "hist"
+
+  # Class imbalance handling
+  imbalance:
+    strategy: "scale_pos_weight" # 'scale_pos_weight' or 'negative_sampling'
+    target_pos_ratio: 0.10
+
+  # Probability calibration
+  calibration:
+    enabled: true
+    method: "isotonic" # 'isotonic' or 'sigmoid'
+
+  # Feature Importance & Explainability
+  explanations:
+    feature_importance: true
+    shap_enabled: false
+
+  # Data splitting
+  data_split:
+    train_ratio: 0.70
+    val_ratio: 0.15
+    test_ratio: 0.15
+    random_seed: 42

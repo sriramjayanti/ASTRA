@@ -1,0 +1,16 @@
+# ASTRA Pipeline XGBoost Scorer Configuration
+scorer:
+  model_type: "xgboost"
+  n_estimators: 100
+  max_depth: 6
+  learning_rate: 0.1
+  calibrate_probabilities: true
+  calibration_method: "isotonic"
+  confidence_weights:
+    fec_syndrome: 0.35
+    crc_match: 0.30
+    evm_margin: 0.15
+    sync_lock: 0.10
+    spectral_fit: 0.10
+  acceptance_threshold: 0.70
+  inconclusive_threshold: 0.40

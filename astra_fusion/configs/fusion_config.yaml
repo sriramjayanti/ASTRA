@@ -1,0 +1,62 @@
+version: 1.0.0
+fusion:
+  mode: weighted_probability
+  top_k: 3
+  branches:
+    resnet1d:
+      model_name: astra_resnet1d_v2
+      model_version: 2.0.0
+      checkpoint_path: checkpoints/astra_resnet1d_v2.pt
+      weight: 0.5
+      temperature: 1.0
+      embedding_dim: 256
+      input_shape:
+      - 2
+      - 2048
+    spectrogram2d:
+      model_name: astra_spectrogram2d_v2
+      model_version: 2.0.0
+      checkpoint_path: checkpoints/astra_spectrogram_cnn_v2.pt
+      weight: 0.5
+      temperature: 1.0
+      embedding_dim: 256
+      stft:
+        n_fft: 128
+        hop_length: 32
+        win_length: 128
+        window: hann
+        fftshift: true
+  classes:
+  - 2-FSK
+  - 4-FSK
+  - BPSK
+  - QPSK
+  - 8PSK
+  - DQPSK
+  - MSK
+  - 16QAM
+  - 64QAM
+  - 256QAM
+  - UNKNOWN
+  thresholds:
+    confirmed: 0.85
+    estimated: 0.5
+    possible: 0.3
+    confirmed_margin: 0.2
+  entropy:
+    enabled: true
+    epsilon: 1.0e-12
+  calibration:
+    enabled: false
+    temperature_1d: 1.0
+    temperature_2d: 1.0
+  learned_fusion:
+    hidden_dims:
+    - 256
+    - 128
+    dropout: 0.2
+    learning_rate: 0.0005
+    weight_decay: 0.0001
+    batch_size: 128
+    epochs: 25
+    early_stopping_patience: 5

@@ -1,0 +1,22 @@
+# ASTRA GUI & Scientific Visualization Configuration
+gui:
+  title: "ASTRA — Automated Signal Analysis & Recovery Assistant"
+  window:
+    default_width: 1600
+    default_height: 950
+    min_width: 1200
+    min_height: 700
+  theme: "dark"
+  fps_limit: 60
+  opengl:
+    enabled: true
+    fallback_to_software: true
+    multisampling: 4
+  plots:
+    max_scatter_points: 20000
+    max_spectrogram_time_bins: 512
+    downsampling_mode: "peak"
+    antialiasing: true
+  timeline:
+    auto_advance: true
+    step_delay_ms: 100

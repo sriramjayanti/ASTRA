@@ -1,0 +1,69 @@
+# ASTRA Synthetic Engine 5: Modulation / Clean IQ Waveform Configuration
+
+modulation_generator:
+  version: "1.0.0"
+  master_seed: 42
+
+  # Default sample rate and symbol rate (integer SPS = 192000 / 9600 = 20)
+  sample_rate_hz: 192000.0
+  default_symbol_rate_hz: 9600.0
+
+  symbol_rates:
+    mode: random_choice
+    values:
+      - 1200.0
+      - 2400.0
+      - 4800.0
+      - 9600.0
+      - 19200.0
+      - 24000.0
+
+  enabled_modulations:
+    - 2fsk
+    - 4fsk
+    - bpsk
+    - qpsk
+    - 8psk
+    - 16qam
+    - 64qam
+
+  selection_probability:
+    2fsk: 0.10
+    4fsk: 0.10
+    bpsk: 0.15
+    qpsk: 0.20
+    8psk: 0.15
+    16qam: 0.15
+    64qam: 0.15
+
+  default_profiles:
+    2fsk: "2fsk_cp"
+    4fsk: "4fsk_cp"
+    msk: "msk_cp"
+    bpsk: "bpsk_rrc"
+    qpsk: "qpsk_rrc"
+    8psk: "8psk_rrc"
+    dqpsk: "dqpsk_rrc"
+    16qam: "16qam_rrc"
+    64qam: "64qam_rrc"
+    256qam: "256qam_rrc"
+
+  psk_qam:
+    pulse_shape: "rrc"
+    rolloff:
+      mode: random_choice
+      values:
+        - 0.20
+        - 0.25
+        - 0.35
+        - 0.50
+    filter_span_symbols: 8
+
+  fsk:
+    continuous_phase: true
+    tone_spacing_ratio:
+      mode: random_choice
+      values:
+        - 0.5
+        - 1.0
+        - 1.5

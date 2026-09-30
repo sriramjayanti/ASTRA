@@ -1,0 +1,87 @@
+# ASTRA Synthetic Engine 3: FEC Encoding / Coding Ground-Truth Generator Configuration
+fec_generator:
+  version: "1.0.0"
+  master_seed: 42
+  bit_order: "msb_first"
+
+  enabled_types:
+    - "none"
+    - "convolutional"
+    - "reed_solomon"
+    - "concatenated"
+    - "ldpc"
+
+  selection_probability:
+    none: 0.10
+    convolutional: 0.35
+    reed_solomon: 0.20
+    concatenated: 0.15
+    ldpc: 0.20
+
+  default_profiles:
+    none: "none"
+    convolutional: "conv_k7_r12"
+    reed_solomon: "rs_255_223"
+    concatenated: "concat_rs255223_conv_k7"
+    ldpc: "ldpc_n128_k64_r12"
+
+  convolutional:
+    profiles:
+      - name: "conv_k3_r12"
+        rate: "1/2"
+        constraint_length: 3
+        generators: [0o7, 0o5]
+        termination_mode: "zero_tail"
+
+      - name: "conv_k5_r12"
+        rate: "1/2"
+        constraint_length: 5
+        generators: [0o35, 0o23]
+        termination_mode: "zero_tail"
+
+      - name: "conv_k7_r12"
+        rate: "1/2"
+        constraint_length: 7
+        generators: [0o171, 0o133]
+        termination_mode: "zero_tail"
+
+  reed_solomon:
+    profiles:
+      - name: "rs_255_223"
+        n: 255
+        k: 223
+        symbol_size_bits: 8
+
+      - name: "rs_255_239"
+        n: 255
+        k: 239
+        symbol_size_bits: 8
+
+      - name: "rs_64_48"
+        n: 64
+        k: 48
+        symbol_size_bits: 8
+
+  concatenated:
+    profiles:
+      - name: "concat_rs255223_conv_k7"
+        outer: "rs_255_223"
+        inner: "conv_k7_r12"
+
+      - name: "concat_rs255239_conv_k3"
+        outer: "rs_255_239"
+        inner: "conv_k3_r12"
+
+  ldpc:
+    profiles:
+      - name: "ldpc_n128_k64_r12"
+        profile_id: "ldpc_n128_k64_r12"
+
+      - name: "ldpc_n256_k128_r12"
+        profile_id: "ldpc_n256_k128_r12"
+
+      - name: "ldpc_n512_k256_r12"
+        profile_id: "ldpc_n512_k256_r12"
+
+      - name: "ldpc_n96_k64_r23"
+        profile_id: "ldpc_n96_k64_r23"

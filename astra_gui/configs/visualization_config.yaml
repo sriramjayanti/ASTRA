@@ -1,0 +1,63 @@
+# 3D Signal World and Visualization Configuration
+engine:
+  antialias: true
+  multisample: 4
+  fov: 60.0
+  near_clip: 0.1
+  far_clip: 5000.0
+
+transitions:
+  default_duration_ms: 450
+  cinematic_duration_ms: 1200
+  playback_speeds: [0.25, 0.5, 1.0, 2.0, 5.0]
+
+scenes:
+  raw_signal:
+    max_rendered_samples: 16384
+    tunnel_depth: 300.0
+    line_width: 2.0
+    color: [0.0, 0.82, 1.0, 0.85]
+
+  dsp:
+    spectral_terrain_grid: [64, 64]
+    filter_curve_samples: 512
+
+  modulation:
+    candidate_node_radius: 8.0
+    branch_curve_segments: 32
+
+  synchronization:
+    rotation_speed_initial: 2.5
+    rotation_speed_final: 0.05
+    cfo_spiral_turns: 5
+
+  constellation:
+    max_points: 8192
+    cluster_center_size: 14.0
+    point_size: 4.0
+
+  demodulation:
+    decision_grid_opacity: 0.25
+    bit_bubble_count: 64
+
+  deinterleaver:
+    grid_rows: 16
+    grid_cols: 16
+    animation_shuffle_ms: 800
+
+  fec:
+    trellis_stages: 16
+    corrupted_color: [1.0, 0.0, 0.33, 0.9]
+    repaired_color: [0.0, 0.96, 0.6, 0.9]
+
+  frame_discovery:
+    ribbon_length: 512
+    block_gap: 12.0
+
+  payload:
+    hex_matrix_columns: 16
+    transformation_step_ms: 300
+
+  explainability:
+    network_radius: 50.0
+    claim_node_size: 20.0

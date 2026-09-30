@@ -1,0 +1,126 @@
+{
+  "manifest_version": "2.1.0",
+  "generated_at": "2026-09-28T23:56:50+05:30",
+  "hardware": {
+    "device": "NVIDIA GeForce RTX 3050 A Laptop GPU",
+    "cuda_version": "12.4",
+    "torch_version": "2.6.0+cu124"
+  },
+  "common_class_mapping": [
+    "2-FSK",
+    "4-FSK",
+    "BPSK",
+    "QPSK",
+    "8PSK",
+    "DQPSK",
+    "MSK",
+    "16QAM",
+    "64QAM",
+    "256QAM"
+  ],
+  "unknown_class_handling": "confidence_threshold_rejection",
+  "dataset": {
+    "name": "ASTRA_MODULATION_SYNTHETIC_V2",
+    "total_source_captures": 4320,
+    "total_windows": 17280,
+    "fsk_enriched": true,
+    "fsk_features": [
+      "Gaussian pulse shaping (GFSK, BT 0.25-0.70)",
+      "Raised Cosine frequency filtering (beta 0.20-0.50)",
+      "Asymmetric VCO perturbation (+-1% to +-6%)",
+      "Bandpass edge tone droop",
+      "Power amplifier warm-up chirp",
+      "Power supply 50/60/100 Hz FM hum",
+      "Frame preamble dotting sequences",
+      "DMR 24-bit sync word & Barker-13 burst patterns",
+      "Sustained tone dwell runs"
+    ]
+  },
+  "models": {
+    "astra_resnet1d_modulation_v2": {
+      "model_id": "astra_resnet1d_modulation_v2",
+      "model_type": "1d_time_domain",
+      "architecture": "ResNet1DModClassifier",
+      "file_path": "checkpoints/astra_resnet1d_modulation_v2.pt",
+      "sha256": "7478a030fa46d9353a327389bac59eaf840d5a5d180de370ad5987185e5a1ab8",
+      "size_mb": 6.32,
+      "input_shape": [2, 2048],
+      "metrics": {
+        "test_accuracy": 0.5106,
+        "test_macro_f1": 0.4713,
+        "2fsk_f1": 0.6339,
+        "4fsk_f1": 0.6347,
+        "bpsk_f1": 0.7968,
+        "8psk_f1": 0.5033,
+        "msk_f1": 0.6117,
+        "16qam_f1": 0.4152,
+        "256qam_f1": 0.3378,
+        "ood_accuracy": 0.3576,
+        "noise_rejection_rate": 0.7700
+      },
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM"
+      ]
+    },
+    "astra_spectrogram_cnn_v2": {
+      "model_id": "astra_spectrogram_cnn_v2",
+      "model_type": "2d_spectrogram",
+      "architecture": "ASTRASpectrogramCNN",
+      "file_path": "checkpoints/astra_spectrogram_cnn_v2.pt",
+      "sha256": "94f2fd37c69129fc35923cc3608af28bff9c1c60131b27796a28677b7ee7c7ae",
+      "size_mb": 10.74,
+      "input_shape": [1, 128, 128],
+      "metrics": {
+        "test_accuracy": 0.4213,
+        "test_macro_f1": 0.3853,
+        "2fsk_f1": 0.5634,
+        "4fsk_f1": 0.6549,
+        "bpsk_f1": 0.6270,
+        "msk_f1": 0.6446,
+        "16qam_f1": 0.3289,
+        "256qam_f1": 0.2421
+      },
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM"
+      ]
+    }
+  },
+  "fusion": {
+    "engine": "WeightedSoftmaxMultiBranchFusion",
+    "optimal_w_1d": 0.75,
+    "optimal_w_2d": 0.25,
+    "fusion_test_accuracy": 0.5417,
+    "fusion_test_macro_f1": 0.4968,
+    "fusion_top3_accuracy": 0.8634,
+    "per_class_f1": {
+      "2-FSK": 0.6773,
+      "4-FSK": 0.7191,
+      "BPSK": 0.7822,
+      "QPSK": 0.2838,
+      "8PSK": 0.5258,
+      "DQPSK": 0.3481,
+      "MSK": 0.6429,
+      "16QAM": 0.4178,
+      "64QAM": 0.2543,
+      "256QAM": 0.3165
+    }
+  }
+}

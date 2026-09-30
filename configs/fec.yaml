@@ -1,0 +1,26 @@
+# ASTRA Forward Error Correction (FEC) Configuration
+fec:
+  search_depth: "standard"
+  viterbi:
+    traceback_depth: 35
+    soft_decision: true
+    generator_polynomials:
+      standard_r1_2: [0o171, 0o133]    # K=7, r=1/2 (NASA/CCSDS)
+      standard_r1_3: [0o133, 0o145, 0o175]
+    puncturing_rates: ["1/2", "2/3", "3/4", "5/6", "7/8"]
+  reed_solomon:
+    profiles:
+      - name: "rs_255_223"
+        n: 255
+        k: 223
+        symsize: 8
+      - name: "rs_255_239"
+        n: 255
+        k: 239
+        symsize: 8
+  bch:
+    enabled: true
+    max_error_correction: 4
+  ldpc:
+    enabled: false                      # Experimental flag
+    max_iterations: 50

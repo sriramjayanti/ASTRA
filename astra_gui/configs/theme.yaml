@@ -1,0 +1,44 @@
+# ASTRA Scientific Observatory Dark Theme Specification
+palette:
+  background_deep: "#0a0c10"
+  background_panel: "#12161f"
+  background_surface: "#181e2b"
+  background_elevated: "#212838"
+  border_subtle: "#263043"
+  border_bright: "#3b4a6b"
+
+  # Accents
+  primary_cyan: "#00d2ff"
+  primary_glow: "#00f0ff"
+  secondary_violet: "#9d4edd"
+  accent_blue: "#3a86ff"
+
+  # Status / Evidence
+  confirmed_green: "#00f59b"
+  estimated_cyan: "#00d2ff"
+  possible_amber: "#ffbe0b"
+  unknown_gray: "#6c757d"
+  error_red: "#ff0055"
+  warning_orange: "#fb5607"
+
+  # Text hierarchy
+  text_primary: "#f0f4fc"
+  text_secondary: "#9bb0cf"
+  text_muted: "#5d6d88"
+  text_monospace: "#64dfdf"
+
+  # Region colors for Bitstream & Frames
+  region_sync: "#00b4d8"
+  region_header: "#7209b7"
+  region_payload: "#00f59b"
+  region_crc: "#f72585"
+  region_padding: "#4a4e69"
+  region_unknown: "#6c757d"
+
+fonts:
+  interface: "Segoe UI, Inter, Roboto, Helvetica Neue, sans-serif"
+  monospace: "Consolas, Fira Code, JetBrains Mono, monospace"
+  title_size: 16
+  body_size: 12
+  caption_size: 10
+  code_size: 11

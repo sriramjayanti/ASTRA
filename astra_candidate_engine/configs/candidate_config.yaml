@@ -1,0 +1,48 @@
+candidate_engine:
+  version: "1.0.0"
+  
+  # Bounds on input grid
+  modulation_top_k: 5
+  symbol_rate_top_k: 3
+  max_candidates: 15
+  beam_width: 15
+
+  # Duplicate detection & rate merge tolerance
+  rate_merge_tolerance_percent: 2.0
+
+  # Physical constraints
+  min_sps: 1.0
+  max_sps: 2000.0
+  
+  # Fine rate variants expansion
+  rate_variants:
+    enabled: false
+    offsets_percent:
+      - -1.0
+      - 0.0
+      - 1.0
+
+  # Scoring configuration
+  score:
+    mode: "weighted_product" # options: "weighted_product", "log_linear"
+    modulation_weight: 1.0
+    symbol_rate_weight: 1.0
+    rf_family_weight: 0.25
+    constellation_weight: 0.25
+    pre_sync_constellation_weight_scale: 0.5
+    post_sync_constellation_weight_scale: 1.0
+
+  min_probability_epsilon: 1.0e-8
+
+  # Fallback standard rate grid if baud estimation fails or missing
+  fallback:
+    enabled: true
+    standard_rates_hz:
+      - 1200.0
+      - 2400.0
+      - 4800.0
+      - 9600.0
+      - 19200.0
+      - 38400.0
+      - 56000.0
+    default_fallback_score: 0.10

@@ -1,0 +1,39 @@
+# ASTRA Pipeline Stage Execution Configuration
+pipeline:
+  max_candidates: 24
+  beam_width: 8
+  timeout_seconds: 120
+  fail_fast: false
+  allow_partial_recovery: true
+  enable_fec_search: true
+  enable_interleaver_search: true
+  enable_bitstream_transformer: true
+  stages:
+    - name: "dsp_preprocessing"
+      enabled: true
+    - name: "modulation_models"
+      enabled: true
+    - name: "model_fusion"
+      enabled: true
+    - name: "symbol_rate_estimation"
+      enabled: true
+    - name: "candidate_generation"
+      enabled: true
+    - name: "synchronization"
+      enabled: true
+    - name: "demodulation"
+      enabled: true
+    - name: "interleaver_testing"
+      enabled: true
+    - name: "fec_testing"
+      enabled: true
+    - name: "validation_engine"
+      enabled: true
+    - name: "pipeline_scorer"
+      enabled: true
+    - name: "bitstream_intelligence"
+      enabled: true
+    - name: "payload_explorer"
+      enabled: true
+    - name: "explainability"
+      enabled: true

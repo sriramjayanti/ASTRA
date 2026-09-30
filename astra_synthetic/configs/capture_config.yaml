@@ -1,0 +1,130 @@
+# =====================================================================
+# ASTRA Synthetic Engine 7 — Sampling / Capture / File Generator Config
+# =====================================================================
+
+capture_generator:
+  version: "1.0.0"
+  master_seed: 42
+  output_root: "./output/captures"
+
+  default_format: "raw_iq"
+
+  formats:
+    raw_iq:
+      enabled: true
+      extension: ".iq"
+    wav:
+      enabled: true
+      extension: ".wav"
+    sigmf:
+      enabled: true
+      extension: ".sigmf-data"
+
+  quantization:
+    mode: full_scale_peak
+    headroom_db: 1.0
+
+  clipping:
+    enabled: false
+    clip_level: 1.0
+
+  visible_metadata:
+    sample_rate:
+      expose_probability: 1.0
+    center_frequency:
+      expose_probability: 1.0
+
+# Standard capture presets / profiles
+profiles:
+  raw_f32_le_iq:
+    description: "Raw float32 little-endian interleaved I/Q"
+    format: "raw_iq"
+    dtype: "float32"
+    endianness: "little"
+    iq_order: "IQ"
+
+  raw_f32_be_iq:
+    description: "Raw float32 big-endian interleaved I/Q"
+    format: "raw_iq"
+    dtype: "float32"
+    endianness: "big"
+    iq_order: "IQ"
+
+  raw_i16_le_iq:
+    description: "Raw 16-bit signed integer little-endian interleaved I/Q"
+    format: "raw_iq"
+    dtype: "int16"
+    endianness: "little"
+    iq_order: "IQ"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  raw_i16_le_qi:
+    description: "Raw 16-bit signed integer little-endian interleaved Q/I"
+    format: "raw_iq"
+    dtype: "int16"
+    endianness: "little"
+    iq_order: "QI"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  raw_i8_iq:
+    description: "Raw 8-bit signed integer interleaved I/Q"
+    format: "raw_iq"
+    dtype: "int8"
+    endianness: "little"
+    iq_order: "IQ"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  wav_i16_iq:
+    description: "Standard 2-channel 16-bit PCM WAV (Ch0=I, Ch1=Q)"
+    format: "wav"
+    dtype: "int16"
+    iq_order: "IQ"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  wav_i16_qi:
+    description: "Standard 2-channel 16-bit PCM WAV in Q/I order (Ch0=Q, Ch1=I)"
+    format: "wav"
+    dtype: "int16"
+    iq_order: "QI"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  wav_f32_iq:
+    description: "2-channel 32-bit float WAV (Ch0=I, Ch1=Q)"
+    format: "wav"
+    dtype: "float32"
+    iq_order: "IQ"
+
+  sigmf_cf32_le:
+    description: "SigMF-compliant complex float32 little-endian recording"
+    format: "sigmf"
+    dtype: "float32"
+    endianness: "little"
+    iq_order: "IQ"
+
+  sigmf_ci16_le:
+    description: "SigMF-compliant complex int16 little-endian recording"
+    format: "sigmf"
+    dtype: "int16"
+    endianness: "little"
+    iq_order: "IQ"
+    quantization:
+      mode: "full_scale_peak"
+      headroom_db: 1.0
+
+  missing_samplerate_test:
+    description: "Evaluation profile where sample rate is masked from visible metadata"
+    format: "raw_iq"
+    dtype: "float32"
+    endianness: "little"
+    iq_order: "IQ"
+    sample_rate_visible: false

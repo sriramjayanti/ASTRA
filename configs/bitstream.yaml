@@ -1,0 +1,15 @@
+# ASTRA Bitstream Intelligence Configuration
+bitstream:
+  max_bits_analyzed: 100000
+  entropy:
+    window_sizes: [64, 128, 256, 512]
+    shannon_entropy_threshold_high: 0.95
+    shannon_entropy_threshold_low: 0.70
+  periodicity:
+    max_lag: 4096
+    min_peak_prominence: 0.15
+  run_length:
+    max_run_analyzed: 128
+  autocorrelation:
+    fft_accelerated: true
+    normalize: true

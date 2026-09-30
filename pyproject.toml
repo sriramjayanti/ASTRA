@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "astra"
+version = "1.0.0"
+description = "ASTRA: Automated Signal Analysis & Recovery Assistant"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+license = { text = "Proprietary / Internal" }
+authors = [
+    { name = "ASTRA Engineering Team" }
+]
+keywords = [
+    "dsp",
+    "signal-processing",
+    "modulation-classification",
+    "demodulation",
+    "fec",
+    "deep-learning",
+    "pyside6",
+    "sdr"
+]
+dependencies = [
+    "numpy>=2.0.0,<=2.2.6",
+    "scipy>=1.15.0,<=1.15.3",
+    "torch>=2.1.0,<=2.14.0",
+    "scikit-learn>=1.5.0,<=1.7.2",
+    "xgboost>=2.1.0,<=3.2.0",
+    "joblib>=1.4.0,<=1.6.0",
+    "reedsolo>=1.7.0",
+    "PySide6>=6.8.0,<=6.11.2",
+    "pyqtgraph>=0.13.3,<=0.14.0",
+    "PyOpenGL>=3.1.7,<=3.1.10",
+    "PyYAML>=6.0.1,<=6.0.3",
+    "pandas>=2.2.0,<=2.3.3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov"
+]
+
+[project.scripts]
+astra = "astra_cli.main:main"
+astra-gui = "astra_gui.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "astra_*",
+    "ASTRA_*",
+    "configs*"
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests", "astra_gui/tests"]
+pythonpath = ["."]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --import-mode=importlib"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist"
+]

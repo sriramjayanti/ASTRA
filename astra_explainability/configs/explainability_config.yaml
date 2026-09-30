@@ -1,0 +1,47 @@
+explainability:
+  version: "1.0.0"
+
+  statuses:
+    confirmed_threshold: 0.85
+    estimated_threshold: 0.60
+    possible_threshold: 0.35
+    confirmed_min_strong_groups: 2
+    critical_field_min_strong_groups: 3
+
+  confidence_weights:
+    modulation_weight: 0.10
+    symbol_rate_weight: 0.10
+    synchronization_weight: 0.10
+    demodulation_weight: 0.10
+    interleaver_weight: 0.05
+    fec_weight: 0.15
+    validation_weight: 0.20
+    pipeline_ranking_weight: 0.10
+    structure_weight: 0.05
+    payload_weight: 0.05
+
+  contradiction_penalties:
+    low: 0.02
+    medium: 0.06
+    high: 0.15
+    critical: 0.30
+
+  margin_factors:
+    large_margin_threshold: 0.30
+    large_margin_bonus: 0.05
+    small_margin_threshold: 0.08
+    small_margin_penalty: 0.10
+
+  missing_evidence_penalties:
+    missing_crc: 0.08
+    missing_profile: 0.03
+    short_capture: 0.05
+    single_frame: 0.05
+
+  alternatives:
+    top_k: 3
+
+  provenance:
+    system_name: "ASTRA"
+    engine_stage: 15
+    feature_schema: "explainability_v1"

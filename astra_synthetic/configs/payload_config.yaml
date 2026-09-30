@@ -1,0 +1,57 @@
+# ASTRA Synthetic Engine 1: Payload / Bitstream Generator Configuration
+payload_generator:
+  version: "1.0.0"
+  master_seed: 42
+  count: 10000
+  bit_order: "msb_first"
+
+  length:
+    mode: "random"
+    min_bits: 256
+    max_bits: 4096
+
+  types:
+    random_bits:
+      enabled: true
+      probability: 0.40
+
+    random_bytes:
+      enabled: true
+      probability: 0.20
+
+    repeated_pattern:
+      enabled: true
+      probability: 0.10
+      patterns:
+        - "01"
+        - "1010"
+        - "11110000"
+        - "10110011"
+
+    biased_random:
+      enabled: true
+      probability: 0.10
+      probability_one_range:
+        min: 0.02
+        max: 0.20
+
+    counter:
+      enabled: true
+      probability: 0.10
+
+    text:
+      enabled: true
+      probability: 0.05
+      corpus:
+        - "ASTRA SIGNAL TEST FRAME 001"
+        - "SYNTHETIC BITSTREAM TRANSMISSION"
+        - "GROUND TRUTH TELEMETRY PACKET"
+        - "AUTOMATED SIGNAL RECOVERY 2026"
+
+    fixed_hex:
+      enabled: true
+      probability: 0.05
+      values:
+        - "DEADBEEF"
+        - "CAFEBABE"
+        - "123456789ABCDEF0"

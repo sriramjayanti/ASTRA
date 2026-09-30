@@ -1,0 +1,16 @@
+# ASTRA Explainability Configuration
+explainability:
+  evidence_levels:
+    confirmed:
+      min_confidence: 0.85
+      requires_crc_pass: true
+    estimated:
+      min_confidence: 0.65
+      requires_syndrome_pass: true
+    possible:
+      min_confidence: 0.40
+    unknown:
+      max_confidence: 0.39
+  feature_importance:
+    enabled: true
+    top_k_features: 5

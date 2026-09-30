@@ -1,0 +1,21 @@
+decoders:
+  magic_bytes:
+    PNG: "89504E470D0A1A0A"
+    JPEG: "FFD8FFE0"
+    PDF: "25504446"
+    ZIP: "504B0304"
+    GZIP: "1F8B"
+    ELF: "7F454C46"
+
+  text_encodings:
+    - "utf-8"
+    - "ascii"
+    - "latin-1"
+
+  default_views:
+    - "raw_bits"
+    - "hex"
+    - "bytes"
+    - "utf8"
+    - "ascii"
+    - "base64"

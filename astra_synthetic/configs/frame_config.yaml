@@ -1,0 +1,55 @@
+# ASTRA Synthetic Engine 2: Frame / Sync / Header / CRC Generator Configuration
+frame_generator:
+  version: "1.0.0"
+  master_seed: 42
+  bit_order: "msb_first"
+
+  sync:
+    mode: "fixed"
+    format: "hex"
+    value: "1ACFFC1D"
+    values:
+      - "1ACFFC1D"
+      - "D391D391"
+      - "A5A5A5A5"
+
+  header:
+    schema_name: "astra_default_v1"
+    fields:
+      version:
+        bits: 4
+        value: 1
+
+      frame_type:
+        bits: 4
+        value: 0
+
+      sequence_number:
+        bits: 16
+        source: "auto_increment"
+
+      payload_length:
+        bits: 24
+        source: "payload_length"
+        unit: "bits"
+
+      flags:
+        bits: 8
+        value: 0
+
+  crc:
+    enabled: true
+    type: "crc16_ccitt"
+    scope:
+      - "header"
+      - "payload"
+
+  padding:
+    enabled: false
+    align_to_bits: 8
+    value: 0
+
+  inter_frame_gap:
+    enabled: false
+    length_bits: 16
+    mode: "zeros"

@@ -1,0 +1,58 @@
+fec:
+  version: "1.0.0"
+  engine_name: "ASTRA_FEC_Testing_Engine"
+
+  # Family enablement flags
+  families:
+    none:
+      enabled: true
+      weight: 1.0
+    convolutional:
+      enabled: true
+      weight: 0.90
+    reed_solomon:
+      enabled: true
+      weight: 0.85
+    concatenated:
+      enabled: true
+      weight: 0.75
+    ldpc:
+      enabled: true
+      weight: 0.80
+
+  # Viterbi decoder configuration
+  viterbi:
+    prefer_soft: true
+    traceback_depth: 35
+    soft_metric_scale: 1.0
+    termination_mode: "auto"  # 'auto', 'terminated', 'continuous'
+
+  # Reed-Solomon decoder configuration
+  reed_solomon:
+    max_codewords_to_decode: 64
+    erasure_threshold_llr: 0.5
+
+  # LDPC decoder configuration
+  ldpc:
+    decoder_algorithm: "normalized_min_sum"  # 'normalized_min_sum', 'belief_propagation'
+    min_sum_normalization_factor: 0.80
+    max_iterations: 30
+    early_stopping: true
+
+  # Search parameters & beam control
+  search:
+    max_candidates_per_input: 25
+    beam_width: 8
+    enable_alignment_search: true
+    max_alignment_offsets: 8
+    lazy_materialization: false
+
+  # Scoring configuration
+  scoring:
+    quality_weight: 1.0
+    path_metric_weight: 0.8
+    syndrome_weight: 1.0
+    parity_weight: 1.0
+    convergence_weight: 1.0
+    error_correction_weight: 0.6
+    family_prior_weight: 0.3

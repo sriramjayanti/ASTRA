@@ -1,0 +1,16 @@
+{
+  "capture_record_id": "cap_000011",
+  "file_name": "fixture_i16_le_iq.iq",
+  "file_format": "raw_iq",
+  "sample_rate_hz": 192000.0,
+  "center_frequency_hz": null,
+  "sample_count_complex": 16441,
+  "scalar_sample_count": 32882,
+  "duration_seconds": 0.08563,
+  "storage_dtype": "int16",
+  "endianness": "little",
+  "iq_order": "IQ",
+  "channel_count": 2,
+  "file_size_bytes": 65764,
+  "file_sha256": "6a103a3af130cec54a3c09effb6af572988b4fa20a39e546bd5338d0e427fe21"
+}

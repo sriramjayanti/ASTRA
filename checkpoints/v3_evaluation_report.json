@@ -1,0 +1,261 @@
+{
+  "evaluation_timestamp": "2026-09-30 10:59:40",
+  "total_captures": 1100,
+  "overall_top1_accuracy": 41.0,
+  "overall_top3_accuracy": 79.18,
+  "macro_f1": 40.1,
+  "per_class": {
+    "2-FSK": {
+      "total": 100,
+      "top1_accuracy": 32.0,
+      "top3_accuracy": 89.0
+    },
+    "4-FSK": {
+      "total": 100,
+      "top1_accuracy": 52.0,
+      "top3_accuracy": 90.0
+    },
+    "BPSK": {
+      "total": 100,
+      "top1_accuracy": 66.0,
+      "top3_accuracy": 84.0
+    },
+    "QPSK": {
+      "total": 100,
+      "top1_accuracy": 47.0,
+      "top3_accuracy": 85.0
+    },
+    "8PSK": {
+      "total": 100,
+      "top1_accuracy": 19.0,
+      "top3_accuracy": 64.0
+    },
+    "DQPSK": {
+      "total": 100,
+      "top1_accuracy": 23.0,
+      "top3_accuracy": 85.0
+    },
+    "MSK": {
+      "total": 100,
+      "top1_accuracy": 59.0,
+      "top3_accuracy": 90.0
+    },
+    "16QAM": {
+      "total": 100,
+      "top1_accuracy": 23.0,
+      "top3_accuracy": 65.0
+    },
+    "64QAM": {
+      "total": 100,
+      "top1_accuracy": 13.0,
+      "top3_accuracy": 61.0
+    },
+    "256QAM": {
+      "total": 100,
+      "top1_accuracy": 28.0,
+      "top3_accuracy": 61.0
+    },
+    "UNKNOWN": {
+      "total": 100,
+      "top1_accuracy": 89.0,
+      "top3_accuracy": 97.0
+    }
+  },
+  "snr_breakdown": {
+    "high": {
+      "count": 366,
+      "top1": 45.9,
+      "top3": 84.2
+    },
+    "med": {
+      "count": 345,
+      "top1": 41.2,
+      "top3": 79.7
+    },
+    "low": {
+      "count": 140,
+      "top1": 34.3,
+      "top3": 80.7
+    },
+    "neg": {
+      "count": 249,
+      "top1": 37.3,
+      "top3": 70.3
+    }
+  },
+  "cfo_breakdown": {
+    "low": {
+      "count": 269,
+      "top1": 51.3,
+      "top3": 81.4
+    },
+    "med": {
+      "count": 399,
+      "top1": 37.3,
+      "top3": 77.2
+    },
+    "high": {
+      "count": 432,
+      "top1": 38.0,
+      "top3": 79.6
+    }
+  },
+  "confusion_matrix": [
+    [
+      32,
+      13,
+      1,
+      2,
+      1,
+      2,
+      41,
+      1,
+      0,
+      0,
+      7
+    ],
+    [
+      14,
+      52,
+      0,
+      2,
+      4,
+      0,
+      16,
+      0,
+      2,
+      0,
+      10
+    ],
+    [
+      0,
+      0,
+      66,
+      7,
+      2,
+      11,
+      0,
+      4,
+      1,
+      9,
+      0
+    ],
+    [
+      0,
+      0,
+      3,
+      47,
+      23,
+      18,
+      1,
+      5,
+      0,
+      3,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      47,
+      19,
+      26,
+      4,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      48,
+      24,
+      23,
+      0,
+      0,
+      0,
+      3,
+      1
+    ],
+    [
+      25,
+      1,
+      0,
+      4,
+      6,
+      4,
+      59,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      19,
+      10,
+      1,
+      6,
+      0,
+      23,
+      15,
+      26,
+      0
+    ],
+    [
+      0,
+      0,
+      23,
+      4,
+      1,
+      5,
+      3,
+      23,
+      13,
+      27,
+      1
+    ],
+    [
+      0,
+      0,
+      20,
+      6,
+      2,
+      3,
+      2,
+      24,
+      15,
+      28,
+      0
+    ],
+    [
+      4,
+      1,
+      1,
+      1,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0,
+      89
+    ]
+  ],
+  "classes": [
+    "2-FSK",
+    "4-FSK",
+    "BPSK",
+    "QPSK",
+    "8PSK",
+    "DQPSK",
+    "MSK",
+    "16QAM",
+    "64QAM",
+    "256QAM",
+    "UNKNOWN"
+  ]
+}

@@ -1,0 +1,50 @@
+payload_explorer:
+  version: "1.0.0"
+  engine_name: "ASTRA_Header_Payload_Explorer"
+  
+  # Mode: 'auto', 'profile_aware', 'blind_exploration'
+  mode: "auto"
+  
+  frames:
+    max_candidates: 5
+    default_frame_length: 512
+    min_frame_length: 32
+    max_frame_length: 8192
+    allow_partial_frames: true
+    
+  profiles:
+    enabled: true
+    minimum_match_score: 0.75
+    auto_select_threshold: 0.85
+    profiles_config_path: "configs/protocol_profiles.yaml"
+    
+  blind_fields:
+    enabled: true
+    candidate_widths:
+      - 4
+      - 8
+      - 12
+      - 16
+      - 24
+      - 32
+    endianness_modes:
+      - "big"
+      - "little"
+    counter_detection: true
+    min_counter_confidence: 0.70
+    length_detection: true
+    min_length_correlation: 0.75
+    constant_detection: true
+    
+  payload_views:
+    raw_bits: true
+    hex: true
+    bytes: true
+    utf8: true
+    ascii: true
+    base64: true
+    file_signature_detection: true
+    
+  preview:
+    max_preview_bytes: 64
+    max_hex_dump_bytes: 128

@@ -1,0 +1,29 @@
+# ASTRA Demodulation Configuration
+demodulation:
+  decision_type: "soft"                 # "hard", "soft" (LLR)
+  llr_convention: "positive_zero"      # positive LLR: bit 0 favored, negative LLR: bit 1 favored
+  noise_variance_estimation: "evm"     # "evm", "fixed", "snr"
+  min_noise_var: 1.0e-5
+  max_noise_var: 10.0
+  fsk:
+    discriminator: "quadrature"        # "quadrature", "fft_filterbank"
+    tone_separation_hz: 25000.0
+  constellations:
+    bpsk:
+      bits_per_symbol: 1
+      gray_coded: true
+    qpsk:
+      bits_per_symbol: 2
+      gray_coded: true
+    8psk:
+      bits_per_symbol: 3
+      gray_coded: true
+    16qam:
+      bits_per_symbol: 4
+      gray_coded: true
+    64qam:
+      bits_per_symbol: 6
+      gray_coded: true
+    256qam:
+      bits_per_symbol: 8
+      gray_coded: true

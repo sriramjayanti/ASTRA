@@ -1,0 +1,118 @@
+{
+  "dataset": "CSPB.ML.2018R2 (28 batches)",
+  "model": "ResNet1DModClassifier",
+  "total_test_windows": 2400,
+  "overall_accuracy": 0.7120833333333333,
+  "macro_f1": 0.7122589993197634,
+  "per_class": {
+    "bpsk": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 300
+    },
+    "qpsk": {
+      "precision": 0.9381818181818182,
+      "recall": 0.86,
+      "f1": 0.8973913043478261,
+      "support": 300
+    },
+    "8psk": {
+      "precision": 0.7111716621253406,
+      "recall": 0.87,
+      "f1": 0.782608695652174,
+      "support": 300
+    },
+    "dqpsk": {
+      "precision": 0.8269230769230769,
+      "recall": 0.7166666666666667,
+      "f1": 0.7678571428571429,
+      "support": 300
+    },
+    "msk": {
+      "precision": 0.9933774834437086,
+      "recall": 1.0,
+      "f1": 0.9966777408637874,
+      "support": 300
+    },
+    "16qam": {
+      "precision": 0.5020242914979757,
+      "recall": 0.41333333333333333,
+      "f1": 0.453382084095064,
+      "support": 300
+    },
+    "64qam": {
+      "precision": 0.37730870712401055,
+      "recall": 0.4766666666666667,
+      "f1": 0.4212076583210604,
+      "support": 300
+    },
+    "256qam": {
+      "precision": 0.4,
+      "recall": 0.36,
+      "f1": 0.37894736842105264,
+      "support": 300
+    }
+  },
+  "accuracy_vs_snr": {
+    "0.0": {
+      "accuracy": 0.75,
+      "count": 12
+    },
+    "1.0": {
+      "accuracy": 0.6153846153846154,
+      "count": 52
+    },
+    "2.0": {
+      "accuracy": 0.5714285714285714,
+      "count": 84
+    },
+    "3.0": {
+      "accuracy": 0.4375,
+      "count": 112
+    },
+    "4.0": {
+      "accuracy": 0.675,
+      "count": 120
+    },
+    "5.0": {
+      "accuracy": 0.6987179487179487,
+      "count": 156
+    },
+    "6.0": {
+      "accuracy": 0.7245762711864406,
+      "count": 236
+    },
+    "7.0": {
+      "accuracy": 0.7602739726027398,
+      "count": 292
+    },
+    "8.0": {
+      "accuracy": 0.7420212765957447,
+      "count": 376
+    },
+    "9.0": {
+      "accuracy": 0.7445652173913043,
+      "count": 368
+    },
+    "10.0": {
+      "accuracy": 0.7319277108433735,
+      "count": 332
+    },
+    "11.0": {
+      "accuracy": 0.72,
+      "count": 200
+    },
+    "12.0": {
+      "accuracy": 0.8392857142857143,
+      "count": 56
+    },
+    "13.0": {
+      "accuracy": 0.25,
+      "count": 4
+    }
+  },
+  "saved_checkpoint": "c:\\Users\\srira\\Downloads\\ASTRA_SIH\\ASTRA_Modulation_Model_Starter\\ASTRA_Modulation_Model_Starter\\checkpoints\\best_model_cspb_baseline.pt",
+  "confusion_matrix_plot": "c:\\Users\\srira\\Downloads\\ASTRA_SIH\\ASTRA_Modulation_Model_Starter\\ASTRA_Modulation_Model_Starter\\eval_results\\cspb_confusion_matrix.png",
+  "accuracy_vs_snr_plot": "c:\\Users\\srira\\Downloads\\ASTRA_SIH\\ASTRA_Modulation_Model_Starter\\ASTRA_Modulation_Model_Starter\\eval_results\\cspb_accuracy_vs_snr.png"
+}

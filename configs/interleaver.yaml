@@ -1,0 +1,23 @@
+# ASTRA Interleaver Testing Configuration
+interleaver:
+  search_depth: "standard"             # "quick", "standard", "exhaustive"
+  types:
+    - name: "none"
+      enabled: true
+    - name: "block"
+      enabled: true
+      matrix_dimensions:
+        - [8, 16]
+        - [16, 16]
+        - [16, 32]
+        - [32, 32]
+        - [64, 64]
+    - name: "convolutional"
+      enabled: true
+      delays: [1, 2, 4, 8, 16]
+      branches: [6, 12, 16]
+    - name: "helical"
+      enabled: true
+      rows: [16, 32]
+      columns: [16, 32]
+      step: 1
