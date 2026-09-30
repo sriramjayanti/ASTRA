@@ -4,19 +4,19 @@
   "communications_captures": 1000,
   "noise_captures": 50,
   "hardware_device": "cuda",
-  "execution_time_seconds": 564.56,
+  "execution_time_seconds": 632.13,
   "metrics": {
     "Modulation Top-1": 32.7,
     "Modulation Top-3": 70.2,
     "Modulation Top-5": 87.4,
-    "Baud Top-1": 27.0,
-    "Baud Top-3": 51.0,
-    "Baud Top-5": 51.0,
+    "Baud Top-1": 29.2,
+    "Baud Top-3": 54.4,
+    "Baud Top-5": 65.1,
     "Sync success": 99.9,
-    "Correct demodulation": 0.4,
+    "Correct demodulation": 0.5,
     "Correct interleaver in Top-K": 100.0,
     "Correct FEC in Top-K": 74.1,
-    "Pipeline Top-1": 8.6,
+    "Pipeline Top-1": 8.9,
     "Payload exact recovery": 0.0,
     "Noise false-positive rate": 0.0
   },
@@ -24,15 +24,15 @@
     "Low (< 4 dB)": {
       "total": 324,
       "mod_top1": 83,
-      "baud_top1": 52,
+      "baud_top1": 64,
       "sync_ok": 324,
-      "demod_ok": 0,
+      "demod_ok": 1,
       "payload_ok": 0
     },
     "Medium (4-14 dB)": {
       "total": 338,
       "mod_top1": 108,
-      "baud_top1": 103,
+      "baud_top1": 102,
       "sync_ok": 337,
       "demod_ok": 2,
       "payload_ok": 0
@@ -40,7 +40,7 @@
     "High (> 14 dB)": {
       "total": 338,
       "mod_top1": 136,
-      "baud_top1": 115,
+      "baud_top1": 126,
       "sync_ok": 338,
       "demod_ok": 2,
       "payload_ok": 0
@@ -51,7 +51,7 @@
       "total": 100,
       "mod_top1": 55,
       "mod_top3": 93,
-      "baud_top1": 18,
+      "baud_top1": 19,
       "sync_ok": 100,
       "demod_ok": 2,
       "payload_ok": 0
@@ -60,7 +60,7 @@
       "total": 100,
       "mod_top1": 55,
       "mod_top3": 93,
-      "baud_top1": 9,
+      "baud_top1": 11,
       "sync_ok": 100,
       "demod_ok": 0,
       "payload_ok": 0
@@ -69,7 +69,7 @@
       "total": 100,
       "mod_top1": 49,
       "mod_top3": 62,
-      "baud_top1": 33,
+      "baud_top1": 32,
       "sync_ok": 100,
       "demod_ok": 0,
       "payload_ok": 0
@@ -78,16 +78,16 @@
       "total": 100,
       "mod_top1": 24,
       "mod_top3": 69,
-      "baud_top1": 37,
+      "baud_top1": 43,
       "sync_ok": 100,
-      "demod_ok": 1,
+      "demod_ok": 0,
       "payload_ok": 0
     },
     "8PSK": {
       "total": 100,
       "mod_top1": 11,
       "mod_top3": 38,
-      "baud_top1": 32,
+      "baud_top1": 34,
       "sync_ok": 100,
       "demod_ok": 0,
       "payload_ok": 0
@@ -96,7 +96,7 @@
       "total": 100,
       "mod_top1": 13,
       "mod_top3": 60,
-      "baud_top1": 34,
+      "baud_top1": 41,
       "sync_ok": 99,
       "demod_ok": 0,
       "payload_ok": 0
@@ -107,14 +107,14 @@
       "mod_top3": 95,
       "baud_top1": 23,
       "sync_ok": 100,
-      "demod_ok": 1,
+      "demod_ok": 3,
       "payload_ok": 0
     },
     "16QAM": {
       "total": 100,
       "mod_top1": 24,
       "mod_top3": 59,
-      "baud_top1": 28,
+      "baud_top1": 31,
       "sync_ok": 100,
       "demod_ok": 0,
       "payload_ok": 0
@@ -132,7 +132,7 @@
       "total": 100,
       "mod_top1": 19,
       "mod_top3": 70,
-      "baud_top1": 25,
+      "baud_top1": 27,
       "sync_ok": 100,
       "demod_ok": 0,
       "payload_ok": 0

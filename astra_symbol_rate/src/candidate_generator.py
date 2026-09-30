@@ -29,7 +29,7 @@ class SymbolRateCandidateGenerator:
         self.max_raw_candidates = max_raw_candidates
         self.max_merged_candidates = max_merged_candidates
         self.standard_rates = list(standard_rates) if standard_rates else [
-            300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 56000, 57600,
+            300, 600, 1200, 2400, 4800, 9600, 19200, 24000, 38400, 48000, 56000, 57600,
             115200, 250000, 500000, 1000000
         ]
 
@@ -201,7 +201,11 @@ class SymbolRateCandidateGenerator:
             mod_u = modulation_hint.upper() if modulation_hint else ""
             fsk_synth: List[SymbolRateCandidate] = []
             if "4-FSK" in mod_u:
-                for mult, tag in [(1.0 / 4.0, "fsk4_obw_div4"), (1.0 / 3.5, "fsk4_obw_div3_5"), (1.0 / 3.0, "fsk4_obw_div3")]:
+                for mult, tag in [
+                    (1.0 / 4.0, "fsk4_obw_div4"), (1.0 / 3.5, "fsk4_obw_div3_5"),
+                    (1.0 / 3.0, "fsk4_obw_div3"), (1.0 / 2.0, "fsk4_obw_div2"),
+                    (1.0 / 1.5, "fsk4_obw_div1_5"), (1.0, "fsk4_obw_1_0")
+                ]:
                     fr = occupied_bandwidth_hz * mult
                     sps = sample_rate_hz / fr if fr > 0 else 0
                     if 1.4 <= sps <= 500.0 and not any(abs(c2.rate_hz - fr) / fr <= 0.025 for c2 in candidates + fsk_synth):
@@ -213,8 +217,13 @@ class SymbolRateCandidateGenerator:
                             score=16.0,
                             raw_rate=fr,
                         ))
-            elif "2-FSK" in mod_u:
-                for mult, tag in [(1.0, "fsk2_obw_1_0"), (1.0 / 1.5, "fsk2_obw_div1_5"), (1.0 / 2.0, "fsk2_obw_div2")]:
+            else:
+                for mult, tag in [
+                    (1.0, "fsk2_obw_1_0"), (1.0 / 1.5, "fsk2_obw_div1_5"),
+                    (1.0 / 2.0, "fsk2_obw_div2"), (1.0 / 3.0, "fsk2_obw_div3"),
+                    (1.0 / 4.0, "fsk2_obw_div4"), (2.0, "fsk2_obw_mult2"),
+                    (4.0, "fsk2_obw_mult4"), (8.0, "fsk2_obw_mult8")
+                ]:
                     fr = occupied_bandwidth_hz * mult
                     sps = sample_rate_hz / fr if fr > 0 else 0
                     if 1.4 <= sps <= 500.0 and not any(abs(c2.rate_hz - fr) / fr <= 0.025 for c2 in candidates + fsk_synth):
@@ -249,11 +258,15 @@ class SymbolRateCandidateGenerator:
                         c.score *= 0.30  # Overtone harmonic penalty
                 else:
                     if "4-FSK" in (modulation_hint or "").upper():
-                        if 2.5 <= ratio <= 4.8:
-                            c.score *= 1.8
+                        if 1.2 <= ratio <= 6.0:
+                            c.score *= 2.5
+                        elif 0.8 <= ratio <= 8.0:
+                            c.score *= 1.5
                     elif "2-FSK" in (modulation_hint or "").upper():
-                        if 0.8 <= ratio <= 2.4:
-                            c.score *= 1.8
+                        if 0.5 <= ratio <= 4.0:
+                            c.score *= 2.5
+                        elif 0.25 <= ratio <= 6.0:
+                            c.score *= 1.5
 
         # Inter-candidate Harmonic Sibling Disambiguation (Resolves 3/4 Rs and 1/2 Rs traps)
         if not is_fsk and occupied_bandwidth_hz > 50.0:
@@ -301,14 +314,25 @@ class SymbolRateCandidateGenerator:
         all_raw.extend(evidence.bandwidth_candidates)
         all_raw.extend(evidence.cyclostationary_peaks)
 
-        # Standard rate priors are added with low baseline score (0.02)
+        # Standard rate priors are added with adaptive baseline score based on SNR and bandwidth plausibility
+        snr = getattr(evidence, "estimated_snr_db", 10.0)
+        obw = getattr(evidence, "occupied_bandwidth_hz", 0.0)
+        is_fsk = bool(modulation_hint and "FSK" in modulation_hint.upper())
+        prior_base = 0.85 if snr < 6.0 else 0.40
         for std_r in self.standard_rates:
             sps = sample_rate_hz / std_r
             if 1.5 <= sps <= 256.0:
+                score = prior_base
+                if obw > 50.0:
+                    ratio = obw / std_r
+                    if not is_fsk and 0.85 <= ratio <= 1.6:
+                        score *= 2.5
+                    elif is_fsk and 0.5 <= ratio <= 5.0:
+                        score *= 2.5
                 all_raw.append({
                     "rate_hz": float(std_r),
                     "sps": sps,
-                    "score": 0.02,
+                    "score": float(score),
                     "source": "standard_prior",
                 })
 

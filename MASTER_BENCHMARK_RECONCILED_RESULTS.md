@@ -24,18 +24,18 @@ The benchmark verifies:
 | Metric | Before Audit / Reconciliation | After Reconciliation (Latest Master Run) | Absolute Change |
 | :--- | :--- | :--- | :--- |
 | **Evaluated Captures** | 1,050 (1,000 signal + 50 noise) | 1,050 (1,000 signal + 50 noise) | - |
-| **Execution Time** | ~650s | 564.6s (537.7 ms / capture) | -13.1% |
+| **Execution Time** | ~650s | 632.1s (602.0 ms / capture) | -2.8% |
 | **Noise False-Positive Rate** | N/A (crashing / unhandled) | **0.00%** (50/50 noise rejected) | 0.00% FPR |
 | **Modulation Top-1 Accuracy** | 36.0% | **32.70%** (327 / 1,000) | -3.3% |
 | **Modulation Top-3 Accuracy** | **36.0%** (Bug: Top-1 truncated) | **70.20%** (702 / 1,000) | **+34.20%** |
 | **Modulation Top-5 Accuracy** | N/A | **87.40%** (874 / 1,000) | **+51.40%** |
-| **Baud Rate Top-1 Accuracy** | 45.8% | **27.00%** (270 / 1,000) | -18.8% |
-| **Baud Rate Top-3 Accuracy** | **45.8%** (Bug: Top-1 truncated) | **51.00%** (510 / 1,000) | **+5.20%** |
-| **Baud Rate Top-5 Accuracy** | N/A | **51.00%** (510 / 1,000) | **+5.20%** |
+| **Baud Rate Top-1 Accuracy** | 45.8% | **29.20%** (292 / 1,000) | -16.6% |
+| **Baud Rate Top-3 Accuracy** | **45.8%** (Bug: Top-1 truncated) | **54.40%** (544 / 1,000) | **+8.60%** |
+| **Baud Rate Top-5 Accuracy** | N/A | **65.10%** (651 / 1,000) | **+19.30%** |
 | **Stage 6 Sync Success Rate** | N/A | **99.90%** (999 / 1,000) | Verified |
 | **Stage 8 Interleaver in Top-K**| N/A | **100.00%** (1,000 / 1,000) | Verified |
 | **Stage 9 FEC in Top-K** | N/A | **74.10%** (741 / 1,000) | Verified |
-| **End-to-End Pipeline Top-1** | N/A | **8.60%** (86 / 1,000) | Ground Truth |
+| **End-to-End Pipeline Top-1** | N/A | **8.90%** (89 / 1,000) | Ground Truth |
 
 ---
 

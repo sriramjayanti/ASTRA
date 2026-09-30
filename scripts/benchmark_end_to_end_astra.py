@@ -90,7 +90,7 @@ def run_benchmark():
     # Initialize all ASTRA Engines
     print("\n[INIT] Initializing ASTRA Pipeline Stages & Trained Models...")
     fusion_engine = ASTRAFusionEngine(top_k=5, device=device)
-    sr_estimator = SymbolRateEstimator()
+    sr_estimator = SymbolRateEstimator(top_k=5)
     cand_engine = CandidateHypothesisEngine()
     sync_engine = SynchronizationEngine()
     demod_engine = DemodulationEngine()
@@ -98,10 +98,10 @@ def run_benchmark():
     fast_fec_cfg = {
         "fec": {
             "search": {
-                "max_candidates_per_input": 3,
-                "max_alignment_offsets": 1,
-                "enable_alignment_search": False,
-                "beam_width": 3,
+                "max_candidates_per_input": 8,
+                "max_alignment_offsets": 2,
+                "enable_alignment_search": True,
+                "beam_width": 5,
             }
         }
     }
