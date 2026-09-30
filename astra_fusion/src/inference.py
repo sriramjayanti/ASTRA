@@ -61,11 +61,18 @@ class ASTRAFusionEngine:
 
         if config_path and os.path.exists(config_path):
             with open(config_path, "r") as f:
-                self.config = yaml.safe_load(f)
+                self.config = yaml.safe_load(f) or {}
+        else:
+            default_cfg_path = os.path.join(
+                os.path.dirname(__file__), "..", "configs", "fusion_config.yaml"
+            )
+            if os.path.exists(default_cfg_path):
+                with open(default_cfg_path, "r") as f:
+                    self.config = yaml.safe_load(f) or {}
 
         f_cfg = self.config.get("fusion", {})
-        self.mode = f_cfg.get("mode", mode)
-        self.top_k = f_cfg.get("top_k", top_k)
+        self.mode = mode if mode != "weighted_probability" else f_cfg.get("mode", mode)
+        self.top_k = top_k if top_k != 3 else f_cfg.get("top_k", top_k)
 
         # Thresholds
         t_cfg = f_cfg.get("thresholds", thresholds or {})
@@ -94,11 +101,11 @@ class ASTRAFusionEngine:
         if adapter_1d is not None:
             self.adapter_1d = adapter_1d
         else:
-            ckpt_1d = r1d_cfg.get("checkpoint_path", "best_model_resnet1d.pt")
+            ckpt_1d = r1d_cfg.get("checkpoint_path", "checkpoints/astra_resnet1d_v2.pt")
             self.adapter_1d = ResNet1DAdapter(
                 checkpoint_path=ckpt_1d,
-                model_name=r1d_cfg.get("model_name", "astra_resnet1d_v1"),
-                model_version=r1d_cfg.get("model_version", "1.0.0"),
+                model_name=r1d_cfg.get("model_name", "astra_resnet1d_v2"),
+                model_version=r1d_cfg.get("model_version", "2.0.0"),
                 temperature=r1d_cfg.get("temperature", 1.0),
                 device=self.device,
             )
@@ -106,11 +113,11 @@ class ASTRAFusionEngine:
         if adapter_2d is not None:
             self.adapter_2d = adapter_2d
         else:
-            ckpt_2d = s2d_cfg.get("checkpoint_path", "best_model_2dcnn.pt")
+            ckpt_2d = s2d_cfg.get("checkpoint_path", "checkpoints/astra_spectrogram_cnn_v2.pt")
             self.adapter_2d = Spectrogram2DAdapter(
                 checkpoint_path=ckpt_2d,
-                model_name=s2d_cfg.get("model_name", "astra_spectrogram2d_v1"),
-                model_version=s2d_cfg.get("model_version", "1.0.0"),
+                model_name=s2d_cfg.get("model_name", "astra_spectrogram2d_v2"),
+                model_version=s2d_cfg.get("model_version", "2.0.0"),
                 temperature=s2d_cfg.get("temperature", 1.0),
                 device=self.device,
             )

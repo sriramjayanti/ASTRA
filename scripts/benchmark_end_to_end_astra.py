@@ -114,8 +114,10 @@ def run_benchmark():
     total_comms = 0
     mod_top1_count = 0
     mod_top3_count = 0
+    mod_top5_count = 0
     baud_top1_count = 0
     baud_top3_count = 0
+    baud_top5_count = 0
     sync_success_count = 0
     correct_demod_count = 0
     correct_int_count = 0
@@ -213,9 +215,15 @@ def run_benchmark():
             if isinstance(c, dict) else normalize_modulation_name(getattr(c, "class_name", str(c)))
             for c in f_pred.top_k[:3]
         ]
+        pred_top5_mods = [
+            normalize_modulation_name(c.get("class", c.get("class_name", "")))
+            if isinstance(c, dict) else normalize_modulation_name(getattr(c, "class_name", str(c)))
+            for c in f_pred.top_k[:5]
+        ]
 
         is_mod_top1 = (pred_top1_mod == gt_mod)
         is_mod_top3 = (gt_mod in pred_top3_mods)
+        is_mod_top5 = (gt_mod in pred_top5_mods)
 
         if is_mod_top1:
             mod_top1_count += 1
@@ -228,20 +236,24 @@ def run_benchmark():
             if gt_mod in mod_breakdown:
                 mod_breakdown[gt_mod]["mod_top3"] += 1
 
+        if is_mod_top5:
+            mod_top5_count += 1
+
         # STAGE 2: Symbol Rate Estimation (Baud)
-        sr_pred = sr_estimator.estimate(raw_iq[:4096], sample_rate_hz=fs)
+        sr_pred = sr_estimator.estimate(raw_iq[:8192], sample_rate_hz=fs, modulation_hint=pred_top1_mod)
         est_baud = float(sr_pred.best_symbol_rate_hz)
         baud_candidates = [
             float(c.get("symbol_rate_hz", c.get("rate_hz", 0.0))) if isinstance(c, dict)
             else float(getattr(c, "symbol_rate_hz", 0.0))
-            for c in sr_pred.top_k[:3]
+            for c in sr_pred.top_k[:5]
         ]
         if not baud_candidates and est_baud > 0:
             baud_candidates = [est_baud]
 
         # 5% tolerance for baud match
         is_baud_top1 = (abs(est_baud - gt_baud) / gt_baud <= 0.05)
-        is_baud_top3 = any(abs(b - gt_baud) / gt_baud <= 0.05 for b in baud_candidates)
+        is_baud_top3 = any(abs(b - gt_baud) / gt_baud <= 0.05 for b in baud_candidates[:3])
+        is_baud_top5 = any(abs(b - gt_baud) / gt_baud <= 0.05 for b in baud_candidates[:5])
 
         if is_baud_top1:
             baud_top1_count += 1
@@ -252,8 +264,11 @@ def run_benchmark():
         if is_baud_top3:
             baud_top3_count += 1
 
+        if is_baud_top5:
+            baud_top5_count += 1
+
         # STAGE 3: Candidate Hypothesis Engine
-        mod_dict = {"top_k": [{"class": m, "probability": 0.5} for m in pred_top3_mods]}
+        mod_dict = {"top_k": [{"class": m, "probability": 0.5} for m in pred_top5_mods]}
         sr_dict = {"top_k": [{"symbol_rate_hz": b, "score": 0.5} for b in baud_candidates]}
         cand_set = cand_engine.generate(
             modulation_prediction=mod_dict,
@@ -384,9 +399,12 @@ def run_benchmark():
 
     # Calculate final aggregate metrics
     res_mod_top1 = (mod_top1_count / total_comms) * 100.0 if total_comms > 0 else 0.0
+    res_mod_top1 = (mod_top1_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_mod_top3 = (mod_top3_count / total_comms) * 100.0 if total_comms > 0 else 0.0
+    res_mod_top5 = (mod_top5_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_baud_top1 = (baud_top1_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_baud_top3 = (baud_top3_count / total_comms) * 100.0 if total_comms > 0 else 0.0
+    res_baud_top5 = (baud_top5_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_sync = (sync_success_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_demod = (correct_demod_count / total_comms) * 100.0 if total_comms > 0 else 0.0
     res_interleaver = (correct_int_count / total_comms) * 100.0 if total_comms > 0 else 0.0
@@ -403,8 +421,10 @@ def run_benchmark():
     print("-" * 50)
     print(f"{'Modulation Top-1':<35} | {res_mod_top1:6.2f}%")
     print(f"{'Modulation Top-3':<35} | {res_mod_top3:6.2f}%")
+    print(f"{'Modulation Top-5':<35} | {res_mod_top5:6.2f}%")
     print(f"{'Baud Top-1':<35} | {res_baud_top1:6.2f}%")
     print(f"{'Baud Top-3':<35} | {res_baud_top3:6.2f}%")
+    print(f"{'Baud Top-5':<35} | {res_baud_top5:6.2f}%")
     print(f"{'Sync success':<35} | {res_sync:6.2f}%")
     print(f"{'Correct demodulation':<35} | {res_demod:6.2f}%")
     print(f"{'Correct interleaver in Top-K':<35} | {res_interleaver:6.2f}%")
@@ -426,8 +446,10 @@ def run_benchmark():
         "metrics": {
             "Modulation Top-1": round(res_mod_top1, 2),
             "Modulation Top-3": round(res_mod_top3, 2),
+            "Modulation Top-5": round(res_mod_top5, 2),
             "Baud Top-1": round(res_baud_top1, 2),
             "Baud Top-3": round(res_baud_top3, 2),
+            "Baud Top-5": round(res_baud_top5, 2),
             "Sync success": round(res_sync, 2),
             "Correct demodulation": round(res_demod, 2),
             "Correct interleaver in Top-K": round(res_interleaver, 2),

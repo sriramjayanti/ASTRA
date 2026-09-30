@@ -1,7 +1,7 @@
 version: 1.0.0
 fusion:
   mode: weighted_probability
-  top_k: 3
+  top_k: 5
   branches:
     resnet1d:
       model_name: astra_resnet1d_v2
