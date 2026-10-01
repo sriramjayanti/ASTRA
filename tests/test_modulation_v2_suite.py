@@ -162,7 +162,7 @@ def test_checkpoint_class_mappings():
 
 def test_fusion_engine_output_contract():
     """Verify CalibratedFusionEngineV2 complies with Section 69 & 70."""
-    engine = CalibratedFusionEngineV2(device="cpu")
+    engine = CalibratedFusionEngineV2(device="cpu", top_k=3)
     rng = np.random.default_rng(42)
     fake_iq = rng.normal(0, 1, 2048) + 1j * rng.normal(0, 1, 2048)
     

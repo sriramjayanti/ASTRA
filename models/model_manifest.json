@@ -1,0 +1,78 @@
+{
+  "manifest_version": "3.0.0",
+  "project": "ASTRA \u2014 Automated Signal Analysis & Recovery Assistant",
+  "status": "PRODUCTION_VERIFIED",
+  "models": {
+    "astra_resnet1d_v2": {
+      "model_id": "astra_resnet1d_v2",
+      "version": "2.1.0",
+      "architecture": "ResNet1DV2",
+      "checkpoint_path": "checkpoints/astra_resnet1d_v2.pt",
+      "sha256": "e552165308f8df08e88693d8e7352a145ecfe8055c11180adfb772bb2910f650",
+      "input_shape": [
+        2,
+        2048
+      ],
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM",
+        "NOISE"
+      ],
+      "purpose": "1D Temporal Raw IQ Modulation Feature Extraction and Classification",
+      "required": true
+    },
+    "astra_spectrogram_cnn_v2": {
+      "model_id": "astra_spectrogram_cnn_v2",
+      "version": "2.1.0",
+      "architecture": "SpectrogramCNN2DV2",
+      "checkpoint_path": "checkpoints/astra_spectrogram_cnn_v2.pt",
+      "sha256": "3708cdcc18bcd5b9fee641c2fcb0bf37d7b17437ffa3c5cf3c45a232f24b01bc",
+      "input_shape": [
+        1,
+        128,
+        128
+      ],
+      "classes": [
+        "2-FSK",
+        "4-FSK",
+        "BPSK",
+        "QPSK",
+        "8PSK",
+        "DQPSK",
+        "MSK",
+        "16QAM",
+        "64QAM",
+        "256QAM",
+        "NOISE"
+      ],
+      "purpose": "2D Time-Frequency Spectrogram Feature Extraction and Classification",
+      "required": true
+    },
+    "symbol_rate_ranker": {
+      "model_id": "symbol_rate_ranker",
+      "version": "2.0.0",
+      "architecture": "XGBoostSymbolRateRanker",
+      "checkpoint_path": "checkpoints/symbol_rate_ranker.joblib",
+      "sha256": "7bc5d001b76a9a53cf1e8f1a2e1af782d070dc3bc8ac07529b49f0212be51611",
+      "features": 20,
+      "purpose": "DSP Multi-Evidence Baud Candidate Probability Ranking",
+      "required": true
+    },
+    "pipeline_scorer_xgb": {
+      "model_id": "pipeline_scorer_xgb",
+      "version": "1.0.0",
+      "architecture": "XGBoostPipelineScorer",
+      "checkpoint_path": "checkpoints/pipeline_scorer_xgb/calibrator.joblib",
+      "purpose": "End-to-End Cross-Stage Hypothesis Beam Scoring",
+      "required": true
+    }
+  }
+}
