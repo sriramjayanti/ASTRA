@@ -1,6 +1,6 @@
 """
 hard_decision.py
-Vectorized nearest-neighbor hard decision slicer and margin calculator.
+Vectorized nearest-neighbor hard decision slicer, adaptive constellation clustering/scaling, and margin calculator.
 """
 
 from typing import Tuple, Optional
@@ -8,18 +8,67 @@ import numpy as np
 from .models import ConstellationDefinition, HardDecisionResult
 
 
+def align_and_scale_constellation(
+    symbols: np.ndarray,
+    constellation: ConstellationDefinition,
+    max_iters: int = 5
+) -> np.ndarray:
+    """
+    Decision-directed adaptive gain and phase tracking.
+    Refines complex gain g = scale * exp(j * theta) to minimize mean-squared Euclidean distance
+    between observed symbol clusters and target theoretical constellation points.
+    """
+    if len(symbols) < 16:
+        return symbols
+
+    aligned_symbols = symbols.copy().astype(np.complex64)
+    ref_points = constellation.complex_points
+
+    for _ in range(max_iters):
+        # 1. Slice against current estimate
+        diffs = aligned_symbols[:, np.newaxis] - ref_points[np.newaxis, :]
+        dist_sq = np.real(diffs * np.conj(diffs))
+        best_indices = np.argmin(dist_sq, axis=1)
+        target_pts = ref_points[best_indices]
+
+        # 2. Compute optimal complex LS scalar g = <y, s> / ||y||^2
+        denom = np.sum(np.abs(aligned_symbols) ** 2)
+        if denom < 1e-8:
+            break
+        num = np.sum(target_pts * np.conj(aligned_symbols))
+        complex_scale = num / denom
+
+        # Bound gain adjustment to prevent divergence
+        abs_scale = np.abs(complex_scale)
+        if abs_scale < 0.2 or abs_scale > 5.0:
+            break
+
+        # Apply progressive adjustment
+        aligned_symbols = (aligned_symbols * complex_scale).astype(np.complex64)
+        if abs(abs_scale - 1.0) < 1e-4 and np.abs(np.angle(complex_scale)) < 1e-4:
+            break
+
+    return aligned_symbols
+
+
 def slice_hard_decisions(
     symbols: np.ndarray,
     constellation: ConstellationDefinition,
-    chunk_size: int = 65536
+    chunk_size: int = 65536,
+    adaptive_align: bool = True
 ) -> HardDecisionResult:
     """
-    Vectorized nearest-neighbor hard decision demapping.
+    Vectorized nearest-neighbor hard decision demapping with adaptive gain/phase alignment.
     
     Computes Euclidean distance to all M constellation points, finds argmin,
     extracts Gray-coded hard bits, and calculates decision margins.
     """
-    n_symbols = len(symbols)
+    if adaptive_align and len(symbols) >= 32:
+        proc_symbols = align_and_scale_constellation(symbols, constellation)
+    else:
+        proc_symbols = symbols
+
+    n_symbols = len(proc_symbols)
     ref_points = constellation.complex_points  # [M]
     bit_labels = constellation.bit_labels      # [M, bps]
     m_order = len(ref_points)
@@ -32,7 +81,7 @@ def slice_hard_decisions(
     # Process in memory-safe chunks
     for start in range(0, n_symbols, chunk_size):
         end = min(start + chunk_size, n_symbols)
-        chunk_syms = symbols[start:end]  # [Chunk]
+        chunk_syms = proc_symbols[start:end]  # [Chunk]
 
         # Distance matrix: |y[n] - s_m|^2 -> [Chunk, M]
         diffs = chunk_syms[:, np.newaxis] - ref_points[np.newaxis, :]

@@ -53,4 +53,33 @@ class ConstellationScene(BaseScene):
         self.items.append(self.points_item)
 
     def load_data(self, data: Dict[str, Any]):
-        pass
+        """Renders live complex symbols dynamically in 3D constellation space."""
+        syms = data.get("symbols")
+        if syms is None:
+            syms = data.get("symbol_samples")
+        if syms is None:
+            return
+
+        syms = np.asarray(syms, dtype=np.complex64).ravel()
+        if len(syms) == 0:
+            return
+
+        # Take up to 2,048 symbols for real-time 60fps responsiveness
+        render_syms = syms[:2048]
+        n_pts = len(render_syms)
+
+        # Scale constellation to 3D world units (approx 10 units radius)
+        scale = 12.0
+        x = np.real(render_syms) * scale
+        y = np.imag(render_syms) * scale
+        z = np.sin(np.linspace(0, 4 * np.pi, n_pts)) * 1.5  # Subtle phase/temporal elevation
+
+        pts = np.column_stack([x, y, z])
+        colors = np.zeros((n_pts, 4), dtype=np.float32)
+        colors[:, 0] = 0.0   # Red
+        colors[:, 1] = 0.88  # Green
+        colors[:, 2] = 1.0   # Blue (Cyan/Teal glow)
+        colors[:, 3] = 0.85  # Alpha
+
+        if self.points_item is not None:
+            self.points_item.setData(pos=pts, color=colors, size=6.0)

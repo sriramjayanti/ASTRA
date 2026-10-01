@@ -36,4 +36,29 @@ class PayloadScene(BaseScene):
         self.items.append(self.byte_cubes)
 
     def load_data(self, data: Dict[str, Any]):
-        pass
+        """Dynamically renders recovered payload bytes in 3D space."""
+        raw_b = data.get("payload_bytes")
+        if raw_b is None and "payload_hex" in data:
+            try:
+                raw_b = bytes.fromhex(data["payload_hex"])
+            except Exception:
+                raw_b = None
+        if raw_b is None:
+            return
+
+        n_bytes = max(1, min(len(raw_b), 32))
+        xs = np.linspace(-24.0, 24.0, n_bytes)
+        ys = np.zeros(n_bytes)
+        # Vertical height proportional to byte value normalized [0, 255]
+        byte_vals = np.frombuffer(raw_b[:n_bytes], dtype=np.uint8)
+        zs = 4.0 + (byte_vals / 255.0) * 10.0
+        pos = np.column_stack((xs, ys, zs))
+
+        colors = np.zeros((n_bytes, 4), dtype=np.float32)
+        colors[:, 0] = 0.0   # Emerald / Cyan
+        colors[:, 1] = 0.95
+        colors[:, 2] = 0.65
+        colors[:, 3] = 1.0
+
+        if self.byte_cubes is not None:
+            self.byte_cubes.setData(pos=pos, color=colors, size=16.0)
