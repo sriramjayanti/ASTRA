@@ -81,10 +81,8 @@ def cmd_models(args: argparse.Namespace) -> int:
     print("              ASTRA REGISTERED AI MODELS")
     print("=" * 70)
     checkpoints = [
-        ("ResNet-1D V2 (10-Class Time)", ROOT_DIR / "checkpoints" / "astra_resnet1d_modulation_v2.pt"),
+        ("ResNet-1D V2 (10-Class Time)", ROOT_DIR / "checkpoints" / "astra_resnet1d_v2.pt"),
         ("CNN-2D V2 (10-Class Spectrogram)", ROOT_DIR / "checkpoints" / "astra_spectrogram_cnn_v2.pt"),
-        ("ResNet-1D (Legacy)", ROOT_DIR / "best_model_resnet1d.pt"),
-        ("CNN-2D (Legacy Spectrogram)", ROOT_DIR / "outputs" / "CSPB.ML.2018R2" / "best_model.pt"),
         ("Symbol Rate Ranker", ROOT_DIR / "checkpoints" / "symbol_rate_ranker.joblib"),
         ("Constellation RF Support", ROOT_DIR / "checkpoints" / "random_forest_support.joblib"),
         ("Pipeline Scorer (XGBoost)", ROOT_DIR / "checkpoints" / "pipeline_scorer_xgb" / "xgboost_model.json"),

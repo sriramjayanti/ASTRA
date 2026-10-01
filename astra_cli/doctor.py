@@ -95,12 +95,9 @@ def run_astra_doctor(output_json: str = "SYSTEM_HEALTH_REPORT.json") -> Dict[str
         report["issues"].append("Missing configs directory")
         report["status"] = "CRITICAL"
 
-    # 5. Model Checkpoint Verification
     checkpoints = [
-        ("resnet1d_v2", base_dir / "checkpoints" / "astra_resnet1d_modulation_v2.pt"),
+        ("resnet1d_v2", base_dir / "checkpoints" / "astra_resnet1d_v2.pt"),
         ("cnn2d_v2", base_dir / "checkpoints" / "astra_spectrogram_cnn_v2.pt"),
-        ("resnet1d_legacy", base_dir / "best_model_resnet1d.pt"),
-        ("cnn2d_legacy", base_dir / "outputs" / "CSPB.ML.2018R2" / "best_model.pt"),
         ("symbol_rate_ranker", base_dir / "checkpoints" / "symbol_rate_ranker.joblib"),
         ("random_forest", base_dir / "checkpoints" / "random_forest_support.joblib"),
         ("pipeline_scorer_xgb", base_dir / "checkpoints" / "pipeline_scorer_xgb" / "xgboost_model.json"),
