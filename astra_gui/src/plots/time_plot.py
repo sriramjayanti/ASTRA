@@ -27,6 +27,12 @@ class TimePlotWidget(QWidget):
         self.plot_widget.setLabel('bottom', "Sample Index", color=self.tm.get_color_hex("text_secondary"))
         self.plot_widget.setLabel('left', "Amplitude", color=self.tm.get_color_hex("text_secondary"))
 
+        # Prevent sudden accidental mouse wheel zooming
+        vb = self.plot_widget.getViewBox()
+        if vb is not None:
+            vb.setMouseMode(pg.ViewBox.PanMode)
+            vb.wheelEvent = lambda ev, axis=None: ev.ignore()
+
         # Curves
         pen_i = pg.mkPen(color=self.tm.get_color_hex("primary_cyan"), width=1.5)
         pen_q = pg.mkPen(color=self.tm.get_color_hex("secondary_violet"), width=1.5)

@@ -68,10 +68,22 @@ def generate_augmented_psk_capture(
     elif modulation == "8PSK":
         pts = np.exp(1j * 2.0 * np.pi * np.arange(8) / 8.0)
         symbols = rng.choice(pts, size=num_symbols).astype(np.complex64)
+    elif modulation == "16PSK":
+        pts = np.exp(1j * 2.0 * np.pi * np.arange(16) / 16.0)
+        symbols = rng.choice(pts, size=num_symbols).astype(np.complex64)
     elif modulation == "DQPSK":
         deltas = rng.choice([0.0, np.pi / 2.0, np.pi, 3.0 * np.pi / 2.0], size=num_symbols)
         phases = np.cumsum(deltas) % (2.0 * np.pi)
         symbols = np.exp(1j * phases).astype(np.complex64)
+    elif modulation == "4-ASK":
+        pts = np.array([-3.0, -1.0, 1.0, 3.0]) / np.sqrt(5.0)
+        symbols = rng.choice(pts, size=num_symbols).astype(np.complex64)
+    elif modulation == "8-ASK":
+        pts = np.array([-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0]) / np.sqrt(21.0)
+        symbols = rng.choice(pts, size=num_symbols).astype(np.complex64)
+    elif modulation == "OOK":
+        pts = np.array([0.0, 1.0])
+        symbols = rng.choice(pts, size=num_symbols).astype(np.complex64)
     elif modulation == "MSK":
         bits = rng.choice([-1.0, 1.0], size=num_symbols)
         t_sym = np.linspace(0, 1.0, sps_int, endpoint=False)
@@ -278,6 +290,18 @@ def generate_augmented_qam_capture(
     if modulation == "16QAM":
         levels = np.array([-3, -1, 1, 3], dtype=np.float32)
         norm = 1.0 / np.sqrt(10.0)
+    elif modulation == "32QAM":
+        # Cross constellation: 6x6 grid minus 4 corners
+        coords = []
+        for x_val in [-5, -3, -1, 1, 3, 5]:
+            for y_val in [-5, -3, -1, 1, 3, 5]:
+                if abs(x_val) == 5 and abs(y_val) == 5:
+                    continue  # Remove 4 corners
+                coords.append(complex(x_val, y_val))
+        c_pts = np.array(coords, dtype=np.complex64)
+        c_pts = c_pts / np.sqrt(np.mean(np.abs(c_pts)**2))
+        num_symbols = int(np.ceil(n_samples / sps_int)) + 40
+        const_symbols = rng.choice(c_pts, size=num_symbols)
     elif modulation == "64QAM":
         levels = np.array([-7, -5, -3, -1, 1, 3, 5, 7], dtype=np.float32)
         norm = 1.0 / np.sqrt(42.0)
@@ -285,10 +309,11 @@ def generate_augmented_qam_capture(
         levels = np.arange(-15, 16, 2, dtype=np.float32)
         norm = 1.0 / np.sqrt(170.0)
 
-    num_symbols = int(np.ceil(n_samples / sps_int)) + 40
-    sym_i = rng.choice(levels, size=num_symbols)
-    sym_q = rng.choice(levels, size=num_symbols)
-    const_symbols = (sym_i + 1j * sym_q) * norm
+    if modulation != "32QAM":
+        num_symbols = int(np.ceil(n_samples / sps_int)) + 40
+        sym_i = rng.choice(levels, size=num_symbols)
+        sym_q = rng.choice(levels, size=num_symbols)
+        const_symbols = (sym_i + 1j * sym_q) * norm
 
     upsampled = np.zeros(num_symbols * sps_int, dtype=np.complex64)
     upsampled[::sps_int] = const_symbols
@@ -450,7 +475,7 @@ def build_dataset_partition(
 
             if mod in ["2-FSK", "4-FSK"]:
                 sig, meta = generate_augmented_fsk_capture(mod, n_samples=16384, rng=rng)
-            elif mod in ["16QAM", "64QAM", "256QAM"]:
+            elif mod in ["16QAM", "32QAM", "64QAM", "256QAM"]:
                 sig, meta = generate_augmented_qam_capture(mod, n_samples=16384, rng=rng)
             elif mod == "UNKNOWN":
                 sig, meta = generate_augmented_unknown_capture(n_samples=16384, rng=rng)

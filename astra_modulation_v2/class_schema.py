@@ -21,8 +21,8 @@ checkpoint metadata, inference, fusion, candidate engine, GUI, and explainabilit
 from __future__ import annotations
 from typing import Dict, List, Optional, Tuple, Union
 
-CLASS_SCHEMA_VERSION: str = "modulation_classes_v2"
-NUM_CLASSES_V2: int = 11
+CLASS_SCHEMA_VERSION: str = "modulation_classes_v2_16"
+NUM_CLASSES_V2: int = 16
 
 MODULATION_CLASSES_V2: List[str] = [
     "2-FSK",
@@ -30,11 +30,16 @@ MODULATION_CLASSES_V2: List[str] = [
     "BPSK",
     "QPSK",
     "8PSK",
+    "16PSK",
     "DQPSK",
     "MSK",
     "16QAM",
+    "32QAM",
     "64QAM",
     "256QAM",
+    "4-ASK",
+    "8-ASK",
+    "OOK",
     "UNKNOWN",
 ]
 
@@ -49,10 +54,15 @@ MODULATION_FAMILIES_V2: Dict[str, str] = {
     "BPSK": "PSK",
     "QPSK": "PSK",
     "8PSK": "PSK",
+    "16PSK": "PSK",
     "DQPSK": "PSK",
     "16QAM": "QAM",
+    "32QAM": "QAM",
     "64QAM": "QAM",
     "256QAM": "QAM",
+    "4-ASK": "ASK",
+    "8-ASK": "ASK",
+    "OOK": "ASK",
     "UNKNOWN": "NON_TARGET",
 }
 
@@ -68,15 +78,26 @@ _CLASS_ALIASES: Dict[str, str] = {
     "qpsk": "QPSK",
     "8psk": "8PSK",
     "8-psk": "8PSK",
+    "16psk": "16PSK",
+    "16-psk": "16PSK",
     "dqpsk": "DQPSK",
     "d-qpsk": "DQPSK",
+    "oqpsk": "MSK",
+    "gmsk": "MSK",
     "msk": "MSK",
     "16qam": "16QAM",
     "16-qam": "16QAM",
+    "32qam": "32QAM",
+    "32-qam": "32QAM",
     "64qam": "64QAM",
     "64-qam": "64QAM",
     "256qam": "256QAM",
     "256-qam": "256QAM",
+    "4ask": "4-ASK",
+    "4-ask": "4-ASK",
+    "8ask": "8-ASK",
+    "8-ask": "8-ASK",
+    "ook": "OOK",
     "unknown": "UNKNOWN",
     "noise": "UNKNOWN",
     "awgn": "UNKNOWN",

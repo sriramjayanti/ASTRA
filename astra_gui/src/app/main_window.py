@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QFileDialog, QMessageBox
 )
 from PySide6.QtCore import Qt, QKeyCombination
-from PySide6.QtGui import QKeySequence, QShortcut
+from PySide6.QtGui import QKeySequence, QShortcut, QGuiApplication
 from typing import Optional
 import numpy as np
 
@@ -32,7 +32,21 @@ class ASTRAMainWindow(QMainWindow):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
         self.setWindowTitle("ASTRA — Automated Signal Analysis & Recovery Workstation")
-        self.resize(1720, 980)
+
+        # Dynamically fit user screen resolution without overflowing
+        screen = QGuiApplication.primaryScreen()
+        if screen:
+            avail_geom = screen.availableGeometry()
+            target_w = min(1720, int(avail_geom.width() * 0.96))
+            target_h = min(980, int(avail_geom.height() * 0.94))
+            self.resize(target_w, target_h)
+            # Center on screen
+            self.move(
+                avail_geom.x() + (avail_geom.width() - target_w) // 2,
+                avail_geom.y() + (avail_geom.height() - target_h) // 2
+            )
+        else:
+            self.resize(1280, 800)
 
         self.tm = ThemeManager.get_instance()
         self.setStyleSheet(self.tm.build_stylesheet())
@@ -117,6 +131,9 @@ class ASTRAMainWindow(QMainWindow):
         # Pipeline Controller to UI
         self.bus.pipeline_completed.connect(self._on_pipeline_completed)
         self.bus.candidate_selected.connect(self.state.select_candidate)
+
+        # Full-Screen Toggle for Scientific Dock
+        self.scientific_dock.fullscreen_toggled.connect(self._on_scientific_dock_fullscreen_toggled)
 
     def _setup_shortcuts(self):
         """Keyboard shortcuts for power users."""
@@ -346,3 +363,22 @@ class ASTRAMainWindow(QMainWindow):
             [c.get("description") if isinstance(c, dict) else str(c) for c in summary.get("contradictions", [])],
             [a.get("pipeline_id") if isinstance(a, dict) else str(a) for a in summary.get("candidate_comparison", [])]
         )
+
+    def _on_scientific_dock_fullscreen_toggled(self, is_fullscreen: bool):
+        """Toggles bottom scientific dock to maximize or restore split layout."""
+        if is_fullscreen:
+            # Save prior splitter sizes
+            self._prev_vert_sizes = self.vert_splitter.sizes()
+            # Collapse upper section completely (give 100% height to bottom dock)
+            total_h = sum(self.vert_splitter.sizes())
+            self.vert_splitter.setSizes([0, max(total_h, 800)])
+            self.top_bar.setVisible(False)
+            self.timeline.setVisible(False)
+        else:
+            # Restore view
+            self.top_bar.setVisible(True)
+            self.timeline.setVisible(True)
+            if hasattr(self, "_prev_vert_sizes") and self._prev_vert_sizes:
+                self.vert_splitter.setSizes(self._prev_vert_sizes)
+            else:
+                self.vert_splitter.setSizes([620, 360])

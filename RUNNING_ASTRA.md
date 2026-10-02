@@ -24,17 +24,15 @@ cd ASTRA
 python -m venv .venv
 
 # On Windows (PowerShell):
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 # On Windows (CMD):
 .venv\Scripts\activate.bat
 # On Linux / macOS:
 source .venv/bin/activate
 
-# 3. Install core dependencies
+# 3. Upgrade pip and install all production dependencies
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-
-# 4. (Optional) Install GUI dependencies if using Desktop UI
-pip install PyQt6 pyqtgraph PyOpenGL
 ```
 
 ---
@@ -48,7 +46,7 @@ python scripts/validate_installation.py
 ```
 
 Expected output:
-```
+```text
 ============================================================
   ASTRA SYSTEM HEALTH & INSTALLATION VALIDATION
 ============================================================
@@ -63,7 +61,26 @@ Expected output:
 
 ## 4. Operational Modes
 
-### Mode A: 3-Minute Standalone Judge Demo
+### Mode A: Interactive Desktop Workstation & 3D Signal World (GUI)
+Launch the full interactive 3D signal intelligence workstation:
+
+```bash
+# Recommended launcher:
+python astra_gui/main.py
+
+# Or as module:
+python -m astra_gui.main
+```
+
+**Workstation Features:**
+- **Auto Screen Adaptation:** Dynamically fits within 96% of your monitor's available resolution and centers cleanly.
+- **Dampened 3D Navigation:** Smooth orbit/pan without sudden jumping or camera clipping.
+- **Full-Screen Scientific Dock:** Click the **`⛶ FULL SCREEN`** button in the bottom dock tab bar to expand Time Domain, FFT/PSD, Waterfall, Constellation, Eye Diagram, Bitstream, and Hex/Payload viewers to 100% screen height; click **`🗗 RESTORE VIEW`** to return to split mode.
+- **Instant Demo:** Click `RUN DEMO` in the top bar to run a complete blind signal extraction demonstration directly in the UI.
+
+---
+
+### Mode B: 3-Minute Standalone Judge Demo
 Executes an end-to-end synthetic IQ signal ingestion, modulation classification, baud estimation, synchronization, demodulation, Viterbi decoding, and payload recovery without requiring external datasets:
 
 ```bash
@@ -72,7 +89,16 @@ python scripts/run_demo.py
 
 ---
 
-### Mode B: Command Line Interface (CLI) Analysis
+### Mode C: Complete 16-Stage End-to-End Master Pipeline
+Executes all 16 AI models and DSP stages sequentially on an arbitrary RF capture:
+
+```bash
+python run_complete_astra_ai.py
+```
+
+---
+
+### Mode D: Command Line Interface (CLI) Analysis
 Analyze any raw `.wav` or `.iq` recording directly from the terminal:
 
 ```bash
@@ -91,31 +117,11 @@ Key CLI Output Artifacts generated in `--output-dir`:
 
 ---
 
-### Mode C: Interactive Desktop GUI (PyQt6)
-Launch the full interactive signal triage environment:
+### Mode E: Full 70-Signal Verification Suite
+Evaluates all multi-standard test signals across diverse SNR tiers:
 
 ```bash
-python -m astra_gui.src.app.main_window
-```
-
-**GUI Workflow:**
-1. **Load Capture:** Click `File` $\rightarrow$ `Open Signal Capture...` and select any `.wav`, `.iq`, or `.sigmf` file.
-2. **Execute Triage:** Click `Run Complete Analysis` or press `F5`.
-3. **Inspect Views:**
-   - **Spectrum Tab:** Live FFT, Welch PSD, and interactive 2D Waterfall.
-   - **Modulation & Baud Tab:** Top-5 neural network confidence scores and cyclostationary baud peaks.
-   - **Synchronization Tab:** Costas loop phase trajectory, Gardner timing jitter, and fine CFO correction.
-   - **Constellation Tab:** High-density persistence plot with EVM and IQ imbalance metrics.
-   - **Bitstream & Framing Tab:** Raw demodulated bits, deinterleaved matrix, FEC syndromes, and frame preamble markers.
-   - **Payload Explorer:** Live ASCII, UTF-8, and Hex carver with CRC status indicators.
-
----
-
-### Mode D: Automated Master Benchmark
-Run the comprehensive 1,050-capture end-to-end evaluation suite across all 10 modulation classes and SNR ranges:
-
-```bash
-python scripts/benchmark_end_to_end_astra.py --num-captures 1050 --output docs/archive/MASTER_BENCHMARK_RESULTS.md
+python -u scripts/run_full_verification_suite.py
 ```
 
 ---

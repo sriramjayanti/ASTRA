@@ -13,6 +13,19 @@ from .camera_controller import CameraController
 from ..theme.theme_manager import ThemeManager
 
 
+class SmoothGLViewWidget(gl.GLViewWidget):
+    """GLViewWidget with dampened mouse wheel zoom to prevent sudden jumping."""
+    
+    def wheelEvent(self, ev):
+        delta = ev.angleDelta().y()
+        if delta == 0:
+            delta = ev.angleDelta().x()
+        # Scale down zoom step by 75% for ultra-smooth tracking
+        d = float(delta) * 0.025
+        self.opts['distance'] = max(5.0, min(300.0, self.opts['distance'] * (0.999 ** d)))
+        self.update()
+
+
 class SignalWorldWidget(QWidget):
     """Interactive 3D Signal Processing Observatory Widget."""
 
@@ -23,8 +36,8 @@ class SignalWorldWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-        # 1. 3D OpenGL Viewport
-        self.gl_view = gl.GLViewWidget()
+        # 1. 3D OpenGL Viewport with smooth zoom dampening
+        self.gl_view = SmoothGLViewWidget()
         self.gl_view.setBackgroundColor(self.tm.get_color("background_deep"))
         self.layout.addWidget(self.gl_view)
 

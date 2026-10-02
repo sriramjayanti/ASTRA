@@ -119,7 +119,27 @@ def extract_cyclostationary_candidates(
         if not matched:
             deduped.append(c)
 
-    return deduped[:16]
+    # Subharmonic GCD Sieve (Stage 3 Enhancement):
+    # Detect if a high-scoring peak is actually a 2x, 3x, or 4x harmonic of a fundamental baud
+    sieved: List[Dict[str, float]] = []
+    for cand in deduped:
+        r = cand["rate_hz"]
+        # Check subharmonics r/2, r/3, r/4 in candidate list
+        is_harmonic = False
+        for divisor in [2.0, 3.0, 4.0]:
+            sub_r = r / divisor
+            for other in deduped:
+                if abs(other["rate_hz"] - sub_r) / max(1.0, sub_r) <= 0.025 and other["score"] >= 0.40 * cand["score"]:
+                    # Fundamental exists with solid prominence; boost fundamental score
+                    other["score"] = float(other["score"] * 1.5 + cand["score"] * 0.5)
+                    is_harmonic = True
+                    break
+            if is_harmonic:
+                break
+        sieved.append(cand)
+
+    sieved = sorted(sieved, key=lambda c: c["score"], reverse=True)
+    return sieved[:16]
 
 
 # Alias for backward/interface compatibility

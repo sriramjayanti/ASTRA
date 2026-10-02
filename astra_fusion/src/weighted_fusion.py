@@ -10,6 +10,7 @@ import torch
 import torch.nn.functional as F
 
 from .confidence import ConfidenceCalculator
+from .statistical_gating import apply_statistical_prior_gating
 from .models import (
     BranchPrediction,
     CandidateItem,
@@ -73,9 +74,11 @@ class WeightedProbabilityFusion:
         self,
         pred_1d: BranchPrediction,
         pred_2d: BranchPrediction,
+        raw_iq: Optional[np.ndarray] = None,
     ) -> FusionPrediction:
         """
         Fuses single-window BranchPrediction objects into a full ASTRA FusionPrediction.
+        Optionally applies Stage 1 statistical prior gating if raw IQ is provided.
         """
         # 1. Validation of alignments
         validate_class_alignment(pred_1d.class_names, pred_2d.class_names)
@@ -90,6 +93,10 @@ class WeightedProbabilityFusion:
 
         # 2. Probability fusion
         p_fused = self.fuse_probabilities(p1, p2)
+
+        # Apply Statistical Prior Gating (Stage 1 Enhancement)
+        if raw_iq is not None and len(raw_iq) > 0:
+            p_fused, _ = apply_statistical_prior_gating(p_fused, class_names, raw_iq)
 
         # 3. Branch agreement calculation
         pred_class_1d = pred_1d.predicted_class

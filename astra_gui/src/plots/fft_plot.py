@@ -26,6 +26,11 @@ class FFTPlotWidget(QWidget):
         self.plot_widget.setLabel('bottom', "Frequency (kHz)", color=self.tm.get_color_hex("text_secondary"))
         self.plot_widget.setLabel('left', "Power (dB)", color=self.tm.get_color_hex("text_secondary"))
 
+        vb = self.plot_widget.getViewBox()
+        if vb is not None:
+            vb.setMouseMode(pg.ViewBox.PanMode)
+            vb.wheelEvent = lambda ev, axis=None: ev.ignore()
+
         pen_spec = pg.mkPen(color=self.tm.get_color_hex("primary_cyan"), width=1.5)
         self.spec_curve = self.plot_widget.plot(name="Spectrum", pen=pen_spec)
 

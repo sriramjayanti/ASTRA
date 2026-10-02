@@ -45,7 +45,12 @@ class WaterfallPlotWidget(QWidget):
         if iq_samples is None or len(iq_samples) < nperseg:
             return
 
-        f, t, zxx = signal.stft(iq_samples[:min(len(iq_samples), 16384)], fs=sample_rate, nperseg=nperseg)
+        f, t, zxx = signal.stft(
+            iq_samples[:min(len(iq_samples), 16384)],
+            fs=sample_rate,
+            nperseg=nperseg,
+            return_onesided=False
+        )
         # Transpose so time is horizontal or vertical as preferred
         spec_mag = np.abs(np.fft.fftshift(zxx, axes=0))
         spec_db = 20 * np.log10(spec_mag + 1e-9)

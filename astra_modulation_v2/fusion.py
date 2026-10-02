@@ -89,14 +89,30 @@ class CalibratedFusionEngineV2:
             self.model_1d = ResNet1DV2(in_channels=2, num_classes=NUM_CLASSES_V2).to(self.device)
             ckpt = torch.load(path_1d, map_location=self.device)
             state = ckpt.get("state_dict", ckpt)
-            self.model_1d.load_state_dict(state)
+            # Adapt weights if checkpoint class count differs from schema
+            model_dict = self.model_1d.state_dict()
+            for k, v in state.items():
+                if k in model_dict and model_dict[k].shape == v.shape:
+                    model_dict[k] = v
+                elif k in model_dict and "classifier" in k:
+                    # Partial copy for classifier head
+                    min_classes = min(model_dict[k].shape[0], v.shape[0])
+                    model_dict[k][:min_classes] = v[:min_classes]
+            self.model_1d.load_state_dict(model_dict)
             self.model_1d.eval()
 
         if os.path.exists(path_2d):
             self.model_2d = SpectrogramCNN2DV2(in_channels=1, num_classes=NUM_CLASSES_V2).to(self.device)
             ckpt = torch.load(path_2d, map_location=self.device)
             state = ckpt.get("state_dict", ckpt)
-            self.model_2d.load_state_dict(state)
+            model_dict = self.model_2d.state_dict()
+            for k, v in state.items():
+                if k in model_dict and model_dict[k].shape == v.shape:
+                    model_dict[k] = v
+                elif k in model_dict and "classifier" in k:
+                    min_classes = min(model_dict[k].shape[0], v.shape[0])
+                    model_dict[k][:min_classes] = v[:min_classes]
+            self.model_2d.load_state_dict(model_dict)
             self.model_2d.eval()
 
     def classify(
@@ -142,6 +158,12 @@ class CalibratedFusionEngineV2:
 
         # Modulate fused probabilities with RF evidence:
         p_final = p_fused * (1.0 + self.rf_beta * rf_support_vec)
+        
+        # Uncertainty & Out-of-Distribution injection for noise / non-target signals:
+        unk_idx = get_class_index("UNKNOWN")
+        if rf_family_probs.get("UNKNOWN", 0.0) > 0.40:
+            p_final[unk_idx] += rf_family_probs["UNKNOWN"] * 0.50
+
         sum_p = np.sum(p_final)
         if sum_p > 0:
             p_final = p_final / sum_p

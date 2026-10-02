@@ -26,6 +26,13 @@ class Constellation2DWidget(QWidget):
         self.plot_widget.setAspectLocked(True)
         self.plot_widget.setLabel('bottom', "In-Phase (I)", color=self.tm.get_color_hex("text_secondary"))
         self.plot_widget.setLabel('left', "Quadrature (Q)", color=self.tm.get_color_hex("text_secondary"))
+        self.plot_widget.setXRange(-2.5, 2.5)
+        self.plot_widget.setYRange(-2.5, 2.5)
+
+        vb = self.plot_widget.getViewBox()
+        if vb is not None:
+            vb.setMouseMode(pg.ViewBox.PanMode)
+            vb.wheelEvent = lambda ev, axis=None: ev.ignore()
 
         # Received symbols scatter
         self.symbols_scatter = pg.ScatterPlotItem(
